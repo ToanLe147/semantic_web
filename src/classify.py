@@ -29,9 +29,8 @@ msg_string = String()
 msg_float = Float32()
 
 
-
 def callback(image_msg):
-    #First convert the image to OpenCV image
+    # First convert the image to OpenCV image
     cv_image = bridge.imgmsg_to_cv2(image_msg, desired_encoding="passthrough")
     cv_image = cv2.resize(cv_image, target_size)  # resize image
     np_image = np.asarray(cv_image)               # read as np array

@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase"
+     xml:base="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:kbase="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Current_state -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Current_state"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Data -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Data"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Initial_state -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Initial_state"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Position -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Position"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Status -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Status"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Gripper -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Gripper"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Robot -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Robot"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Sensor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Sensor"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Task -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Task"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Kinect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Kinect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Sensor"/>
+        <kbase:Position></kbase:Position>
+        <kbase:Status></kbase:Status>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Move -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Move">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Task"/>
+        <kbase:Data></kbase:Data>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#UR5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#UR5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Robot"/>
+        <kbase:Current_state></kbase:Current_state>
+        <kbase:Data></kbase:Data>
+        <kbase:Initial_state></kbase:Initial_state>
+        <kbase:Position></kbase:Position>
+        <kbase:Status></kbase:Status>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Vacuum_gripper -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Vacuum_gripper">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Gripper"/>
+        <kbase:Current_state></kbase:Current_state>
+        <kbase:Data></kbase:Data>
+        <kbase:Initial_state></kbase:Initial_state>
+        <kbase:Position></kbase:Position>
+        <kbase:Status></kbase:Status>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#sample -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#sample">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object"/>
+        <kbase:Data></kbase:Data>
+        <kbase:Position></kbase:Position>
+        <kbase:Status></kbase:Status>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

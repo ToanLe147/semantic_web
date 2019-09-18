@@ -1,5 +1,4 @@
-## CHECK LATER
-
+# TESTING
 import cv2
 import numpy as np
 import os
