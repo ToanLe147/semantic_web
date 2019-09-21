@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web User Interface</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Toan Le">
+    <meta name="description" content="User Interface for Perception System project">
+
+    <script type=text/javascript src="{{url_for('static', filename='jquery/jquery.js')}}"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet"></link>
+
+    <!-- Custom styles for Sidebar -->
+    <link href="{{url_for('static', filename='bootstrap/css/simple-sidebar.css')}}" rel="stylesheet"></link>
+
+    <!-- CSS for Glyphicons -->
+    <link rel="stylesheet" href="{{url_for('static', filename='font-awesome/css/font-awesome.min.css')}}">
+
+    <!-- shortcut icon -->
+    <link href="{{url_for('static', filename='icon/perception.png')}}" rel="shortcut icon"></link>
+
+</head>
+
+<body>
+    <!-- Top LOGO -->
+    <!-- <div class="text-center" style="margin-bottom:0">
+        <a href="http://localhost:8080"><img src="{{url_for('static', filename='logo-en-purple-small.png')}}" alt="Tampere University Logo" style="max-width:400px; margin-top:-7px"></a>
+    </div> -->
+
+    <!-- Main content -->
+    <div class="d-flex bg-secondary" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading bg-light text-white font-weight-bold mb-3">
+                <a href="http://localhost:8080"><img src="{{url_for('static', filename='logo-en-purple-small.png')}}" alt="Tampere University Logo" style="max-width:210px; margin-top:-7px"></a>
+            </div>
+
+            <div class="list-group list-group-flush">
+                <a href="/" class="list-group-item list-group-item-action bg-dark text-white font-weight-bold">Home</a>
+                <a href="/perception" class="list-group-item list-group-item-action bg-dark text-white font-weight-bold">Knowleadge Base</a>
+                <a href="/visual" class="list-group-item list-group-item-action bg-dark text-white font-weight-bold">Visual</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom mb-3">
+              <button class="btn btn-dark mr-3" id="menu-toggle"><span class="fa fa-bars"></span></button>
+              <button onclick="goBack()" class="btn btn-dark"><span class="fa fa-backward"></span></button>
+            </nav>
+
+            {% block body %}{% endblock %}
+
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+
+</body>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>
+<script src="{{url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+  $("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+  });
+</script>
+
+<!-- Go Back button script -->
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+
+</html>
