@@ -11,20 +11,16 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
+  <!-- <node name="world_to_kinect" pkg="tf" type="static_transform_publisher" args="2 1 2.5 1.57 1 1.57 world camera_link 100" /> -->
 
   <!-- send robot urdf to param server -->
-  <include file="$(find semantic_web)/simulation/ur5_upload.launch">
+  <!-- <include file="$(find semantic_web)/simulation/ur5_upload.launch">
     <arg name="limited" value="$(arg limited)"/>
-  </include>
+  </include> -->
+  <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5.urdf"/>
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
-  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
-      args="-urdf -param robot_description
-      -model robot
-      -z 1.0
-      -y 1.0
-      -x 0.5"
-      respawn="false" output="screen" />
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 1.0 -y 1.0 -x 1.15 -Y -1.57" respawn="false" output="screen" />
 
   <include file="$(find ur_gazebo)/launch/controller_utils.launch"/>
 
@@ -39,5 +35,8 @@
     <arg name="limited" default="$(arg limited)"/>
     <arg name="debug" default="$(arg debug)" />
   </include>
+
+  <!--  ************* Visualisation ************  -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>
 
 </launch>

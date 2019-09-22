@@ -80,85 +80,6 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='kinect'>
-      <static>1</static>
-      <pose frame=''>-0.855885 -1.31529 0.036 0 -0 0</pose>
-      <link name='link'>
-        <inertial>
-          <mass>0.1</mass>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>0.073 0.276 0.072</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://kinect/meshes/kinect.dae</uri>
-              <scale>1 1 1</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <sensor name='camera' type='depth'>
-          <update_rate>20</update_rate>
-          <camera name='__default__'>
-            <horizontal_fov>1.0472</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.05</near>
-              <far>3</far>
-            </clip>
-          </camera>
-          <plugin name='camera_plugin' filename='libgazebo_ros_openni_kinect.so'>
-            <baseline>0.2</baseline>
-            <alwaysOn>true</alwaysOn>
-            <updateRate>0.0</updateRate>
-            <cameraName>camera_ir</cameraName>
-            <imageTopicName>/camera/rgb/image_color</imageTopicName>
-            <cameraInfoTopicName>/camera/rgb/camera_info</cameraInfoTopicName>
-            <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
-            <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
-            <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
-            <frameName>camera_link</frameName>
-            <pointCloudCutoff>0.5</pointCloudCutoff>
-            <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
-            <distortionK1>0</distortionK1>
-            <distortionK2>0</distortionK2>
-            <distortionK3>0</distortionK3>
-            <distortionT1>0</distortionT1>
-            <distortionT2>0</distortionT2>
-            <CxPrime>0</CxPrime>
-            <Cx>0</Cx>
-            <Cy>0</Cy>
-            <focalLength>0</focalLength>
-            <hackBaseline>0</hackBaseline>
-          </plugin>
-        </sensor>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-    </model>
     <model name='table'>
       <static>0</static>
       <link name='link'>
@@ -366,68 +287,28 @@
       <pose frame=''>0.939782 -1.05125 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>1116 839000000</sim_time>
-      <real_time>735 515970029</real_time>
-      <wall_time>1569033498 752179355</wall_time>
-      <iterations>639600</iterations>
-      <model name='beer'>
-        <pose frame=''>1.97843 0.556888 1.01496 1.9e-05 -7.4e-05 0.060158</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>1.97842 0.556885 1.12996 1.9e-05 -7.4e-05 0.060158</pose>
-          <velocity>0.001191 0.000788 -0.02409 -0.00663 0.018873 5.2e-05</velocity>
-          <acceleration>0 0 -9.8 1e-06 -0 0</acceleration>
-          <wrench>0 0 -3.822 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='bowl'>
-        <pose frame=''>2.03665 1.08141 1.03254 -0.00019 0.000326 0.007327</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>2.03665 1.08141 1.03254 -0.00019 0.000326 0.007327</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -0.98 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='coke_can'>
-        <pose frame=''>2.28136 1.43497 1.0124 -0.011223 0.004041 -0.229687</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>2.28136 1.43497 1.0124 -0.011223 0.004041 -0.229687</pose>
-          <velocity>-0.001088 2.7e-05 -0.017602 -0.007279 0.019317 4.4e-05</velocity>
-          <acceleration>0 0 -9.8 5e-06 2e-06 0</acceleration>
-          <wrench>0 0 -3.822 0 -0 0</wrench>
-        </link>
-      </model>
+      <sim_time>5093 847000000</sim_time>
+      <real_time>1532 847336881</real_time>
+      <wall_time>1569192788 332451785</wall_time>
+      <iterations>1488993</iterations>
       <model name='ground_plane'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
+        <pose frame=''>1 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='kinect'>
-        <pose frame=''>2.73352 0.958506 2.36269 0.000341 1.1519 -3.11067</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>2.73352 0.958506 2.36269 0.000341 1.1519 -3.11067</pose>
+          <pose frame=''>1 0 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='table'>
-        <pose frame=''>1.99021 1.00432 -1.9e-05 4e-06 -0 -1.56441</pose>
+        <pose frame=''>2 1 -1e-06 0 0 -1.57</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>1.99021 1.00432 -1.9e-05 4e-06 -0 -1.56441</pose>
+          <pose frame=''>2 1 -1e-06 0 0 -1.57</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-1.1062 -0.320272 -17.1654 -0.341744 0.095103 0.067036</acceleration>
-          <wrench>-1.1062 -0.320272 -17.1654 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
@@ -436,164 +317,10 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>2.864 -9.15632 4.81661 0 0.275642 1.32419</pose>
+        <pose frame=''>3.10818 10.712 4.53523 -0 0.167642 -1.94382</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <model name='bowl'>
-      <link name='link'>
-        <inertial>
-          <mass>0.1</mass>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <cylinder>
-              <radius>0.098</radius>
-              <length>0.035</length>
-            </cylinder>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://bowl/meshes/bowl.dae</uri>
-              <scale>1 1 1</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>1.989 1.07295 0 0 -0 0</pose>
-    </model>
-    <model name='beer'>
-      <link name='link'>
-        <pose frame=''>0 0 0.115 0 -0 0</pose>
-        <inertial>
-          <mass>0.39</mass>
-          <inertia>
-            <ixx>0.00058</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00058</iyy>
-            <iyz>0</iyz>
-            <izz>0.00019</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <cylinder>
-              <radius>0.055</radius>
-              <length>0.23</length>
-            </cylinder>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <cylinder>
-              <radius>0.055</radius>
-              <length>0.23</length>
-            </cylinder>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://beer/materials/scripts</uri>
-              <uri>model://beer/materials/textures</uri>
-              <name>Beer/Diffuse</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>1.96189 1.31445 0 0 -0 0</pose>
-    </model>
-    <model name='coke_can'>
-      <link name='link'>
-        <inertial>
-          <mass>0.39</mass>
-          <inertia>
-            <ixx>0.00055575</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00055575</iyy>
-            <iyz>0</iyz>
-            <izz>0.0001755</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <pose frame=''>0.003937 0.004724 -0.18 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>model://coke_can/meshes/coke_can.dae</uri>
-              <scale>1 1 1</scale>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <pose frame=''>0.003937 0.004724 -0.18 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <uri>model://coke_can/meshes/coke_can.dae</uri>
-              <scale>1 1 1</scale>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>2.15701 1.69126 0 0 -0 0</pose>
-    </model>
   </world>
 </sdf>

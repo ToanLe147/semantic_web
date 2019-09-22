@@ -1,12 +1,12 @@
 arm_controller:
   type: position_controllers/JointTrajectoryController
   joints:
-     - shoulder_pan_joint: 0.028
-     - shoulder_lift_joint: -1.74
-     - elbow_joint: 2.035
-     - wrist_1_joint: -0.29
-     - wrist_2_joint: 0.027
-     - wrist_3_joint: 0.0036
+     - shoulder_pan_joint
+     - shoulder_lift_joint
+     - elbow_joint
+     - wrist_1_joint
+     - wrist_2_joint
+     - wrist_3_joint
   constraints:
       goal_time: 0.6
       stopped_velocity_tolerance: 0.05

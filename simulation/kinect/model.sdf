@@ -3,7 +3,8 @@
   <model name="kinect">
     <static>true</static>
     <pose>0 0 0.036 0 0 0</pose>
-    <link name="link">
+    <link name="camera_link_optical"></link>
+    <link name="camera_link">
       <inertial>
         <mass>0.1</mass>
       </inertial>
@@ -47,7 +48,7 @@
           <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
           <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
-          <frameName>camera_link</frameName>
+          <frameName>camera_link_optical</frameName>
           <pointCloudCutoff>0.5</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>
@@ -63,5 +64,13 @@
         </plugin>
       </sensor>
     </link>
+    <joint name="camera_optical_joint" type="fixed">
+      <!-- these values have to be these values otherwise the gazebo camera
+        image won't be aligned properly with the frame it is supposedly
+        originating from -->
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+      <parent link="camera_link"/>
+      <child link="camera_link_optical"/>
+    </joint>
   </model>
 </sdf>
