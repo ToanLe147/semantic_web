@@ -18,10 +18,8 @@
   <node name="rviz_kinect_view" pkg="tf" type="static_transform_publisher" args="0 0 0 -1.57 0 -1.57 cameraBase_link camera_link 100" />
 
   <!-- ************* send robot urdf to param server ************* -->
-  <!-- <include file="$(find semantic_web)/simulation/ur5_upload.launch">
-    <arg name="limited" value="$(arg limited)"/>
-  </include> -->
-  <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5.urdf"/>
+  <!-- <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5_limited.urdf"/> -->
+  <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5_test_gripper.urdf"/>
 
   <!-- ************* push robot_description to factory and spawn robot in gazebo ************* -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot" respawn="false" output="screen" />
