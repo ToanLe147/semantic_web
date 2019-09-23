@@ -5,32 +5,36 @@
   <arg name="sim" default="true" />
   <arg name="debug" default="false" />
 
-  <!-- startup simulated world -->
+  <!-- ************* startup simulated world ************* -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" default="$(find semantic_web)/simulation/experiment_scene.world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
-  <!-- <node name="world_to_kinect" pkg="tf" type="static_transform_publisher" args="2 1 2.5 1.57 1 1.57 world camera_link 100" /> -->
 
-  <!-- send robot urdf to param server -->
+  <!-- ************* Calibrate camera view with ROS tf_tree ************* -->
+  <rosparam command="load" ns="kinect_description" file="$(find semantic_web)/simulation/kinect_ros/kinect.urdf"/>
+  <node name="world_to_kinect" pkg="tf" type="static_transform_publisher" args="1 1 2.5 0 1 0 world cameraBase_link 100" />
+  <node name="rviz_kinect_view" pkg="tf" type="static_transform_publisher" args="0 0 0 -1.57 0 -1.57 cameraBase_link camera_link 100" />
+
+  <!-- ************* send robot urdf to param server ************* -->
   <!-- <include file="$(find semantic_web)/simulation/ur5_upload.launch">
     <arg name="limited" value="$(arg limited)"/>
   </include> -->
   <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5.urdf"/>
 
-  <!-- push robot_description to factory and spawn robot in gazebo -->
-  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 1.0 -y 1.0 -x 1.15 -Y -1.57" respawn="false" output="screen" />
+  <!-- ************* push robot_description to factory and spawn robot in gazebo ************* -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot" respawn="false" output="screen" />
 
   <include file="$(find ur_gazebo)/launch/controller_utils.launch"/>
 
   <rosparam file="$(find ur_gazebo)/controller/arm_controller_ur5.yaml" command="load"/>
   <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
 
-  <!-- Remap follow_joint_trajectory -->
+  <!-- ************* Remap follow_joint_trajectory ************* -->
   <remap if="$(arg sim)" from="/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
 
-  <!-- Launch moveit -->
+  <!-- ************* Launch moveit ************* -->
   <include file="$(find ur5_moveit_config)/launch/move_group.launch">
     <arg name="limited" default="$(arg limited)"/>
     <arg name="debug" default="$(arg debug)" />

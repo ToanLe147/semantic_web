@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<sdf version="1.2">
-  <model name="kinect">
+<sdf version="1.5">
+  <model name="kinect_ros">
     <static>true</static>
     <pose>0 0 0.036 0 0 0</pose>
-    <link name="link">
+    <link name="cameraBase_link">
       <inertial>
         <mass>0.1</mass>
       </inertial>
@@ -17,10 +17,19 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://kinect/meshes/kinect.dae</uri>
+            <uri>model://kinect_ros/meshes/kinect.dae</uri>
           </mesh>
         </geometry>
-      </visual>
+      </visual>        
+    </link>
+
+    <joint name="camera_optical_joint" type="fixed">
+      <pose>0 0 0 -1.57 0 -1.57</pose>
+      <parent>cameraBase_link</parent>
+      <child>camera_link</child>
+    </joint>
+
+    <link name="camera_link">
       <sensor name="camera" type="depth">
         <update_rate>20</update_rate>
         <camera>
@@ -35,7 +44,7 @@
             <far>3</far>
           </clip>
         </camera>
-        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">          
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
           <!-- Keep this zero, update_rate in the parent <sensor> tag
@@ -61,7 +70,7 @@
           <focalLength>0</focalLength>
           <hackBaseline>0</hackBaseline>
         </plugin>
-      </sensor>
+      </sensor>    
     </link>
   </model>
 </sdf>

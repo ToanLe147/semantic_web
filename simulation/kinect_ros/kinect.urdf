@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<robot name="kinect_ros">
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="cameraBase_link"/>
+    <child link="camera_link"/>
+    <origin rpy="-1.57  0   -1.57" xyz="0      0      0.03599"/>
+    <axis xyz="0 0 0"/>
+    <limit effort="0" lower="0" upper="0" velocity="0"/>
+  </joint>
+  <link name="cameraBase_link">
+    <inertial>
+      <mass value="0.1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision name="collision">
+      <origin rpy="0 0 0" xyz="0      0      0.03599"/>
+      <geometry>
+        <box size="0.073000 0.276000 0.072000"/>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <origin rpy="0 0 0" xyz="0      0      0.03599"/>
+      <geometry>
+        <mesh filename="package://semantic_web/simulation/kinect_ros/meshes/kinect.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="camera_link">
+    <inertial>
+      <mass value="0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+</robot>
