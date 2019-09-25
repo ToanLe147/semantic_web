@@ -45,8 +45,15 @@
 
   <div class="container-fluid p-0">
 
-    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
-        <div class="message_holder"></div>
+    <section class="resume-section p-lg-5 align-items-center" id="about">
+        <div id="message_holder"></div>
+        <form class="">
+          <div class="form-group">
+            <label for="Command">Input command</label>
+            <input type="command" class="form-control" id="InputCommand" aria-describedby="emailHelp" placeholder="eg. Get object on the left of table">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </section>
 
     <hr class="m-0">
@@ -67,9 +74,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
 
   <script>
-    var socket = io.connect('http://192.168.100.16:5000')
+    // var socket = io.connect('http://192.168.100.16:5000')
+    var socket = io.connect('http://localhost:5000')
     socket.on('my response', function(msg){
-        $('div.message_holder').append('<b style="color: #000">'+msg+'</b>')
+        document.getElementById("message_holder").innerHTML = msg        
+        socket.emit('update', {
+            data: "User Connected"
+        })
+    })
+    socket.on('connect', function(){
+        socket.emit('update', {
+            data: "User Connected"
+        })
     })
   </script>
 

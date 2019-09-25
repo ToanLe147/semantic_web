@@ -14,6 +14,77 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#above_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#above_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#behind_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#behind_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#below_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#below_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#closest_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#closest_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#connect_to -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#connect_to"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#farthest_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#farthest_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#lack_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#lack_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#left_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#left_of"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#requires -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#requires"/>
+    
+
+
+    <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#right_of -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#right_of"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
     // Data properties
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +179,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Kinect">
         <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Sensor"/>
+        <kbase:Current_state></kbase:Current_state>
+        <kbase:Data></kbase:Data>
+        <kbase:Initial_state></kbase:Initial_state>
         <kbase:Position></kbase:Position>
         <kbase:Status></kbase:Status>
     </owl:NamedIndividual>
@@ -118,7 +192,11 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Move">
         <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Task"/>
+        <kbase:Current_state></kbase:Current_state>
         <kbase:Data></kbase:Data>
+        <kbase:Initial_state></kbase:Initial_state>
+        <kbase:Position></kbase:Position>
+        <kbase:Status></kbase:Status>
     </owl:NamedIndividual>
     
 
@@ -153,7 +231,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#sample">
         <rdf:type rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object"/>
+        <kbase:Current_state></kbase:Current_state>
         <kbase:Data></kbase:Data>
+        <kbase:Initial_state></kbase:Initial_state>
         <kbase:Position></kbase:Position>
         <kbase:Status></kbase:Status>
     </owl:NamedIndividual>
