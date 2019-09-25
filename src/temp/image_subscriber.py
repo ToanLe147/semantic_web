@@ -16,40 +16,45 @@ class Camera:
     * Status:
     """
     def __init__(self):
+        self.test = 1
         self.color_frame = []
         self.depth_frame = []
-        self.image_pub = rospy.Publisher("result_image", Image)
+        self.image_pub = rospy.Publisher("result_image", Image, queue_size=10)
         self.bridge = CvBridge()
         self.image_color = rospy.Subscriber("/camera/rgb/image_color", Image, self.color_callback)
-        self.image_depth = rospy.Subscriber("/camera/depth/image", Image, self.depth_callback)
+        # self.image_depth = rospy.Subscriber("/camera/depth/image", Image, self.depth_callback)
 
     def color_callback(self, data):
         try:
             self.color_frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            # print(self.color_frame)
+            # print("===========")
+            self.test = cv2.imencode('.jpg', self.color_frame)[1].tostring()
+            # print(self.test)
         except CvBridgeError as e:
             print(e)
 
-        cv2.imshow("Color_Frame", self.color_frame)
-        cv2.waitKey(3)
+        # cv2.imshow("Color_Frame", self.color_frame)
+        # cv2.waitKey(3)
 
         # try:
         #     self.image_pub.publish(self.bridge.cv2_to_imgmsg(self.color_frame, "bgr8"))
         # except CvBridgeError as e:
         #     print(e)
 
-    def depth_callback(self, data):
-        try:
-            self.depth_frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
-        except CvBridgeError as e:
-            print(e)
-
-        cv2.imshow("Depth_Frame", self.depth_frame)
-        cv2.waitKey(3)
+    # def depth_callback(self, data):
+    #     try:
+    #         self.depth_frame = self.bridge.imgmsg_to_cv2(data, "bgr8")
+    #     except CvBridgeError as e:
+    #         print(e)
+    #
+    #     cv2.imshow("Depth_Frame", self.depth_frame)
+    #     cv2.waitKey(3)
 
 
 def main():
-    kinect = Camera()
     rospy.init_node("Kinect_python", anonymous=True)
+    kinect = Camera()
     try:
         rospy.spin()
     except KeyboardInterrupt:
