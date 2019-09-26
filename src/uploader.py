@@ -30,18 +30,18 @@ class ontology():
             value = ""
 
         # Prepair message.
-        update = ('DELETE'
-                  + ' WHERE { '
-                  + 'kbase:{0} kbase:{1} ?DATA'.format(name, property)
+        update = ('DELETE '
+                  + 'WHERE { '
+                  + 'kbase:{} kbase:{} ?DATA'.format(name, property)
                   + '};'
                   + 'INSERT'
                   + 'DATA { '
-                  + 'kbase:{0} kbase:{1} {2}'.format(name, property, value)})
+                  + 'kbase:{} kbase:{} {}}'.format(name, property, value))
 
         # send POST request to server
         msg = {'update': self.prefix + update}
-        requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
-
+        if name != "":
+            requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
 
     def handle_instance(self, name, type, action):
         '''
@@ -52,26 +52,24 @@ class ontology():
         '''
 
         # Prepair message.
-        update = ('{}'.format(action)
-                    + ' DATA { '
-                    + 'kbase:{0} a owl:NamedIndividual, kbase:{1};'.format(name, type)
+        update = ('INSERT '
+                    + 'DATA { '
+                    + 'kbase:{} a owl:NamedIndividual, kbase:{};'.format(name, type)
                     + 'kbase:Current_state  "" ;'
                     + 'kbase:Data           "" ;'
                     + 'kbase:Initial_state  "" ;'
                     + 'kbase:Position       "" ;'
                     + 'kbase:Status         "" .}')
 
-        delete = ('{}'.format(action)
-                    + ' WHERE { '
-                    + 'kbase:{0} ?PROP ?DATA'.format(name)
+        delete = ('DELETE '
+                    + 'WHERE { '
+                    + 'kbase:{} ?PROP ?DATA'.format(name)
                     + '}')
 
         # send POST request to server
-        if action = "delete":
-            content = delete
-        if action = "insert":
-            content = update
-        msg = {'update': self.prefix + content}
-        requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+        msg = {'update': self.prefix + delete}
 
-    def query
+        if action == "insert":
+            msg = {'update': self.prefix + update}
+        if name != "":
+            requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
