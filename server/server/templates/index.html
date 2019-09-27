@@ -14,7 +14,10 @@
   <link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
   <!-- Custom Icon -->
-  <link href="{{url_for('static', filename='img/perception.png')}}" rel="shortcut icon"></link>
+  <link href="{{url_for('static', filename='img/perception.png')}}" rel="shortcut icon">
+  <link href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+  integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+  crossorigin="anonymous" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
   <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
@@ -52,7 +55,6 @@
   <div class="container-fluid p-0">
 
     <section class="resume-section p-lg-5 align-items-center" id="main">
-        <div id="message_holder"></div>
         <div class="form-group">
             <label for="Command">Input command</label>
             <input type="command" id="InputCommand" placeholder="eg. Get object
@@ -64,14 +66,12 @@
     <hr class="m-0">
 
     <section class="resume-section p-lg-5 align-items-center" id="update">
-        <div id="server_response">123456</div>
-        <div id="test">123456</div>
 
         <h2>INSTANCE</h2>
         <div class="container">
             <div class="row">
                 <div class="d-flex mb-3 shadow">
-                    <span class="input-group-text" id="basic-addon1">
+                    <span class="input-group-text" >
                         Instance Name
                     </span>
                     <input class="bg-light text-dark" type="text"
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="d-flex mb-3 ml-5">
-                    <span class="input-group-text" id="basic-addon1">
+                    <span class="input-group-text" >
                         Instance Type
                     </span>
                     <select class="custom-select bg-info text-white
@@ -99,31 +99,30 @@
             font-weight-bold" type="button" value="insert">Update</button>
         </div>
 
-        <div class="d-flex mb-3 shadow">
+        <div class="d-flex mb-5 shadow">
             <button id="btn_delete" class="update btn btn-danger btn-block
             font-weight-bold" type="button" value="delete">Delete</button>
         </div>
 
-        <h3>DATA</h3>
-        <div class="container">
-            <div class="row">
+        <h3>DATA PROPERTIES</h3>
+        <div class="container mb-4">
+            <div class="row mb-3">
 
                 <div class="d-flex mb-3 mr-5">
-                    <span class="input-group-text" id="basic-addon1">
-                        Property
+                    <span class="input-group-text" >
+                        Instance
                     </span>
-                    <select class="custom-select bg-light text-dark
+                    <select class="property_instance custom-select bg-info text-light
                     font-weight-bold" id="property_instance">
                         <option selected>Choose ...</option>
-                        <option value="UR5">UR5</option>
                      </select>
                 </div>
 
                 <div class="d-flex mb-3 mr-5">
-                    <span class="input-group-text" id="basic-addon1">
+                    <span class="input-group-text" >
                         Property
                     </span>
-                    <select class="custom-select bg-light text-dark
+                    <select class="custom-select bg-info text-light
                     font-weight-bold" id="property_type">
                         <option selected>Choose ...</option>
                         <option value="Initial_state">Initial_state</option>
@@ -135,7 +134,7 @@
                 </div>
 
                 <div class="d-flex mb-3 shadow">
-                    <span class="input-group-text" id="basic-addon1">
+                    <span class="input-group-text" >
                         Value
                     </span>
                     <input class="bg-light text-dark" type="text"
@@ -143,8 +142,87 @@
                 </div>
 
                 <div class="d-flex mb-3 ml-5 shadow">
-                    <button id="btn_update" class="update_data btn btn-info btn-block
-                    font-weight-bold" type="button" value="insert">Update</button>
+                    <button id="btn_update_data" class="update_data btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+            </div>
+        </div>
+
+        <h3>OBJECT PROPERTIES</h3>
+        <div class="container mb-4">
+            <div class="row">
+                <div class="d-flex mb-3 mr-5 shadow">
+                    <span class="input-group-text" >
+                        Instance 1
+                    </span>
+                    <select class="property_instance custom-select bg-light text-dark
+                    font-weight-bold" id="instance1">
+                        <option selected>Choose ...</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 mr-5">
+                    <select class="object_relationship custom-select bg-info text-white
+                    font-weight-bold" id="object_relationship">
+                        <option selected>Choose relationship</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 mr-5 shadow">
+                    <span class="input-group-text" >
+                        Instance 2
+                    </span>
+                    <select class="property_instance custom-select bg-light text-dark
+                    font-weight-bold" id="instance2">
+                        <option selected>Choose ...</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <button id="btn_update_rel" class="btn_update_rel btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        New Relationship
+                    </span>
+                    <input class="bg-light text-dark" type="text"
+                    id="new_relationship" placeholder="eg. left_of, right_of">
+                </div>
+
+                <div class="d-flex mb-3 ml-3 shadow">
+                    <button id="btn_update_new_rel" class="btn_update_new_rel btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+
+                <!-- <div class="d-flex mb-3 ml-3 shadow">
+                    <button id="btn_delete_new_rel" class="btn_update_new_rel btn btn-danger btn-block
+                    font-weight-bold" type="button" value="delete">Delete</button>
+                </div> -->
+
+            </div>
+        </div>
+
+        <h3>MONITOR <i class="fas fa-exchange-alt"></i></h3>
+        <div class="container">
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        User Request
+                    </span>
+                    <span class="input-group-text text-white bg-dark"
+                    id="request">...</span>
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <span class="input-group-text" >
+                        Server Response
+                    </span>
+                    <span class="input-group-text text-white bg-dark"
+                    id="server_response">...</span>
                 </div>
             </div>
         </div>
@@ -170,8 +248,25 @@
     // var socket = io.connect('http://192.168.100.16:5000')
     var socket = io('http://' + document.domain + ':' + location.port)
 
-    socket.on('update_response', function(msg){
+    socket.on('server_response', function(msg){
         document.getElementById("server_response").innerHTML = msg
+    })
+
+    socket.on("refresh_page", function(i){
+        $(".property_instance").append('<option value="'+i+'">'+i+'</option>')
+    })
+
+    socket.on("refresh_rel_list", function(i){
+        $(".object_relationship").append('<option value="'+i+'">'+i+'</option>')
+    })
+
+    socket.on("connect", function(){
+        $(".property_instance").empty();
+        $(".property_instance").append('<option selected>Choose ...</option>')
+        $(".object_relationship").empty();
+        $(".object_relationship").append('<option selected>Choose ...</option>')
+        socket.emit("refresh_data")
+        socket.emit("refresh_relationship")
     })
 
     $("button.update").click(function(){
@@ -183,20 +278,53 @@
             type: $("#instance_type").val(),
             action: $(this).val()
         })
-        document.getElementById("test").innerHTML = action + name + type
+        document.getElementById("request").innerHTML = action + " " + name
+        + " " + type
+        $(".property_instance").empty();
+        $(".property_instance").append('<option selected>Choose ...</option>')
+        socket.emit("refresh_data")
     })
 
     $("button.update_data").click(function(){
         let name = $("#property_instance").val()
         let value = $("#property_value").val()
         let type = $("#property_type").val()
-        // socket.emit('handle_data', {
-        //     name: $("#property_instance").val()
-        //     value: $("#property_value").val(),
-        //     type: $("#property_type").val(),
-        // })
-        document.getElementById("test").innerHTML = name + type + value
+        socket.emit('handle_data', {
+            name: $("#property_instance").val(),
+            value: '"' + $("#property_value").val() +  '"',
+            type: $("#property_type").val()
+        })
+        document.getElementById("request").innerHTML = name+ " " + type
+        + " " + value
     })
+
+    $("button.btn_update_rel").click(function(){
+        let name1 = $("#instance1").val()
+        let relates = $(".object_relationship").val()
+        let name2 = $("#instance2").val()
+        socket.emit('handle_relationship', {
+            name1: $("#instance1").val(),
+            relates: $(".object_relationship").val(),
+            name2: $("#instance2").val()
+        })
+        document.getElementById("request").innerHTML = name1+ " " + relates
+        + " " + name2
+        $(".object_relationship").empty();
+        $(".object_relationship").append('<option selected>Choose ...</option>')
+        socket.emit("refresh_relationship")
+    })
+
+    $("button.btn_update_new_rel").click(function(){
+        let relates = $("#new_relationship").val()
+        socket.emit('handle_relationship', {
+            relates: $("#new_relationship").val(),
+        })
+        document.getElementById("request").innerHTML = "Add " + relates
+        $(".object_relationship").empty();
+        $(".object_relationship").append('<option selected>Choose ...</option>')
+        socket.emit("refresh_relationship")
+    })
+
   </script>
 
 </body>

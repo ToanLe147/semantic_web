@@ -1,0 +1,5 @@
+<launch>
+  <!-- ************* FlaskApp Server ************* -->
+  <node name="semantic_server" pkg="semantic_web" type="FlaskApp.py" respawn="true" output="screen" />
+
+</launch>
