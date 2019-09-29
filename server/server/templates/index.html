@@ -124,7 +124,7 @@
                     </span>
                     <select class="custom-select bg-info text-light
                     font-weight-bold" id="property_type">
-                        <option selected>Choose ...</option>
+                        <option selected>Choose property</option>
                         <option value="Initial_state">Initial_state</option>
                         <option value="Current_state">Current_state</option>
                         <option value="Data">Data</option>
@@ -151,7 +151,7 @@
         <h3>OBJECT PROPERTIES</h3>
         <div class="container mb-4">
             <div class="row">
-                <div class="d-flex mb-3 mr-5 shadow">
+                <div class="d-flex mb-3 shadow">
                     <span class="input-group-text" >
                         Instance 1
                     </span>
@@ -161,14 +161,17 @@
                      </select>
                 </div>
 
-                <div class="d-flex mb-3 mr-5">
+                <div class="d-flex mb-3 ml-5">
+                    <span class="input-group-text" >
+                        Relationship
+                    </span>
                     <select class="object_relationship custom-select bg-info text-white
                     font-weight-bold" id="object_relationship">
                         <option selected>Choose relationship</option>
                      </select>
                 </div>
 
-                <div class="d-flex mb-3 mr-5 shadow">
+                <div class="d-flex mb-3 ml-5 shadow">
                     <span class="input-group-text" >
                         Instance 2
                     </span>
@@ -197,11 +200,6 @@
                     <button id="btn_update_new_rel" class="btn_update_new_rel btn btn-success btn-block
                     font-weight-bold" type="button" value="update">Update</button>
                 </div>
-
-                <!-- <div class="d-flex mb-3 ml-3 shadow">
-                    <button id="btn_delete_new_rel" class="btn_update_new_rel btn btn-danger btn-block
-                    font-weight-bold" type="button" value="delete">Delete</button>
-                </div> -->
 
             </div>
         </div>
@@ -248,18 +246,7 @@
     // var socket = io.connect('http://192.168.100.16:5000')
     var socket = io('http://' + document.domain + ':' + location.port)
 
-    socket.on('server_response', function(msg){
-        document.getElementById("server_response").innerHTML = msg
-    })
-
-    socket.on("refresh_page", function(i){
-        $(".property_instance").append('<option value="'+i+'">'+i+'</option>')
-    })
-
-    socket.on("refresh_rel_list", function(i){
-        $(".object_relationship").append('<option value="'+i+'">'+i+'</option>')
-    })
-
+    // Initial loading page
     socket.on("connect", function(){
         $(".property_instance").empty();
         $(".property_instance").append('<option selected>Choose ...</option>')
@@ -269,6 +256,22 @@
         socket.emit("refresh_relationship")
     })
 
+    // Server Response
+    socket.on('server_response', function(msg){
+        document.getElementById("server_response").innerHTML = msg
+    })
+
+    // Update Object Property
+    socket.on("refresh_page", function(i){
+        $(".property_instance").append('<option value="'+i+'">'+i+'</option>')
+    })
+
+    // Update Objects Relationship
+    socket.on("refresh_rel_list", function(i){
+        $(".object_relationship").append('<option value="'+i+'">'+i+'</option>')
+    })
+
+    // Click on INSTANCE update button
     $("button.update").click(function(){
         let name = $("#instance_name").val()
         let type = $("#instance_type").val()
@@ -285,6 +288,7 @@
         socket.emit("refresh_data")
     })
 
+    // Click on DATA PROPERTY update button
     $("button.update_data").click(function(){
         let name = $("#property_instance").val()
         let value = $("#property_value").val()
@@ -298,6 +302,7 @@
         + " " + value
     })
 
+    // Click on OBJECT PROPERTY - choosing relationship update button
     $("button.btn_update_rel").click(function(){
         let name1 = $("#instance1").val()
         let relates = $(".object_relationship").val()
@@ -314,6 +319,7 @@
         socket.emit("refresh_relationship")
     })
 
+    // Click on OBJECT PROPERTY - choosing relationship update button
     $("button.btn_update_new_rel").click(function(){
         let relates = $("#new_relationship").val()
         socket.emit('handle_relationship', {

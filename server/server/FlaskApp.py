@@ -11,7 +11,7 @@ socketio = SocketIO(app)
 KnowledgeBase = ontology()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
     return render_template('index.html')
 
@@ -30,8 +30,7 @@ def update_instance(msg):
     type = msg["type"]
     action = msg["action"]
     print ("{} instance name {} {}".format(action, name, type))
-    KnowledgeBase.handle_instance(name, type, action)
-    new_msg = "Instance updated"
+    new_msg = KnowledgeBase.handle_instance(name, type, action)
     if action == "delete":
         new_msg = "Instance deleted"
     socketio.emit('server_response', new_msg, callback="Message Received")
@@ -43,8 +42,8 @@ def update_instance_data(msg):
     property = msg["type"]
     value = msg["value"]
     print ("{} instance type {} {}".format(instance, property, value))
-    KnowledgeBase.update_instance(instance, property, value)
-    socketio.emit('server_response', "Property updated", callback="Message Received")
+    res = KnowledgeBase.update_property(instance, property, value)
+    socketio.emit('server_response', res, callback="Message Received")
 
 
 @socketio.on('refresh_relationship')
@@ -57,18 +56,17 @@ def update_relationship():
 
 @socketio.on('handle_relationship')
 def handle_relationship(msg):
-    print(len(msg))
     data = []
     if len(msg) > 1:
         data = msg["relates"]
         name1 = msg["name1"]
         name2 = msg["name2"]
-        KnowledgeBase.handle_relationship(data, name1, name2)
+        res = KnowledgeBase.handle_relationship(data, name1, name2)
     else:
         data = msg["relates"]
-        KnowledgeBase.handle_relationship(data)
+        res = KnowledgeBase.handle_relationship(data)
     if data:
-        socketio.emit('server_response', "Updated relationship", callback="Message Received")
+        socketio.emit('server_response', res, callback="Message Received")
 
 
 if __name__ == '__main__':

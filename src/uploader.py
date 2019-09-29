@@ -15,7 +15,7 @@ class ontology():
                        + 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> '
                        + 'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ')
 
-    def update_instance(self, name, property, *argv):
+    def update_property(self, name, property, *argv):
         '''
         This method use to send request to update property value of an
         instance. If there is data parameter, the method gives updating. If
@@ -41,7 +41,10 @@ class ontology():
 
         # send POST request to server
         msg = {'update': self.prefix + update}
-        requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+        r = requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+        if r.status_code == 200:
+            print("True")
+            return "Property updated"
 
     def handle_instance(self, name, type, action):
         '''
@@ -68,11 +71,14 @@ class ontology():
 
         # send POST request to server
         msg = {'update': self.prefix + delete}
-
+        res = "Instance deleted"
         if action == "insert":
             msg = {'update': self.prefix + update}
+            res = "Instance updated"
         if name != "":
-            requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+            r = requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+            if r.status_code == 200:
+                return res
 
     def get_instances(self):
         '''
@@ -130,5 +136,6 @@ class ontology():
                         + 'kbase:{} a owl:ObjectProperty'.format(relationship)
                         + '}')
         msg = {'update': self.prefix + content}
-        print(msg)
-        requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+        r = requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
+        if r.status_code == 200:
+            return "Updated relationship"
