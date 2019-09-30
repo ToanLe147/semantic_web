@@ -54,10 +54,11 @@ while True:
     _, contour, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     for i in contour:
+        area = cv2.contourArea(i)
         approx = cv2.approxPolyDP(i, 0.01*cv2.arcLength(i, True), True)
-        print(len(approx))
         if len(approx) == 3:
             cv2.drawContours(frame, [i], 0, (0, 255, 0), 3)
+            print(area)
 
     cv2.imshow("frame", frame)
     cv2.imshow("mask", mask)

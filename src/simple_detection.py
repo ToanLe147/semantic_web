@@ -33,12 +33,16 @@ class Camera:
 
         for i in contour:
             area = cv2.contourArea(i)
-            approx = cv2.approxPolyDP(i, 0.01*cv2.arcLength(i, True), True)
-            print(len(approx))
+            approx = cv2.approxPolyDP(i, 0.03 * cv2.arcLength(i, True), True)
 
-            # if area > 100:
-            if len(approx) == 4:
-                cv2.drawContours(self.img, [approx], 0, (0, 0, 0), 5)
+            if area > 400:
+                cv2.drawContours(self.img, [approx], 0, (0, 0, 0), 3)
+                if len(approx) == 3:
+                    print("Triangle area {}".format(area))
+                if len(approx) == 4:
+                    print("Rectangle area {}".format(area))
+                if len(approx) == 5:
+                    print("Pentagon area {}".format(area))
 
         self.visual(mask)
 
