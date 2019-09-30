@@ -27,11 +27,11 @@ def callback(msg):
     # print(list_pc)
     cloud.from_list(list_pc)
     seg = cloud.make_segmenter()
+    seg.set_optimize_coefficients(True)
     seg.set_model_type(pcl.SACMODEL_PLANE)
     seg.set_method_type(pcl.SAC_RANSAC)
     seg.set_distance_threshold(0.1)
-    seg.set_optimize_coefficients(True)
-    indices, model = seg.segment()
+    indices, coefficients = seg.segment()
     # print(indices)
     new_list_pc = [list_pc[i] for i in indices]
     cloud.from_list(new_list_pc)

@@ -4,10 +4,12 @@
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="sim" default="true" />
   <arg name="debug" default="false" />
+  <arg name="rviz" default="true" />
+  <arg name="world" default="experiment_scene" />
 
   <!-- ************* startup simulated world ************* -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find semantic_web)/simulation/experiment_scene.world"/>
+    <arg name="world_name" default="$(find semantic_web)/simulation/$(arg world).world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
@@ -39,6 +41,6 @@
   </include>
 
   <!--  ************* Visualisation ************  -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>
 
 </launch>
