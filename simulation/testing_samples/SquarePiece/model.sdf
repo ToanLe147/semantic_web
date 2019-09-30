@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='TrianglePiece'>
-    <link name='link_3'>
+  <model name='SquarePiece'>
+    <link name='link_4'>
       <pose frame=''>0 0 0 0 -0 0</pose>
       <inertial>
         <mass>0.05</mass>
@@ -23,14 +23,11 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.00933393 -0.0112007</point>
-            <point>0.000224014 -0.00573477</point>
-            <point>-0.00530167 -0.00241935</point>
-            <point>-0.00813919 -0.000716846</point>
-            <point>-0.00918459 -8.96057e-05</point>
-            <point>-0.00933393 0</point>
-            <point>0.00933393 0.0112007</point>
-            <point>0.00933393 -0.0112007</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>-0.0672045 -0.0672045</point>
+            <point>-0.0672045 0.0672045</point>
+            <point>0.0672045 0.0672045</point>
           </polyline>
         </geometry>
         <material>
@@ -57,14 +54,11 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.00933393 -0.0112007</point>
-            <point>0.000224014 -0.00573477</point>
-            <point>-0.00530167 -0.00241935</point>
-            <point>-0.00813919 -0.000716846</point>
-            <point>-0.00918459 -8.96057e-05</point>
-            <point>-0.00933393 0</point>
-            <point>0.00933393 0.0112007</point>
-            <point>0.00933393 -0.0112007</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>-0.0672045 -0.0672045</point>
+            <point>-0.0672045 0.0672045</point>
+            <point>0.0672045 0.0672045</point>
           </polyline>
         </geometry>
         <surface>
