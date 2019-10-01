@@ -36,7 +36,7 @@ class Camera:
             approx = cv2.approxPolyDP(i, 0.03 * cv2.arcLength(i, True), True)
 
             if area > 400:
-                cv2.drawContours(self.img, [approx], 0, (0, 0, 0), 3)
+                cv2.drawContours(self.img, [approx], 0, (0, 0, 0), 2)
                 if len(approx) == 3:
                     print("Triangle area {}".format(area))
                 if len(approx) == 4:

@@ -16,7 +16,7 @@
 
   <!-- ************* Calibrate camera view with ROS tf_tree ************* -->
   <rosparam command="load" ns="kinect_description" file="$(find semantic_web)/simulation/kinect_ros/kinect.urdf"/>
-  <node name="world_to_kinect" pkg="tf" type="static_transform_publisher" args="1 1 2.5 0 1 0 world cameraBase_link 100" />
+  <node name="world_to_kinect" pkg="tf" type="static_transform_publisher" args="1.73 1 2.5 0 1.4 0 world cameraBase_link 100" />
   <node name="rviz_kinect_view" pkg="tf" type="static_transform_publisher" args="0 0 0 -1.57 0 -1.57 cameraBase_link camera_link 100" />
 
   <!-- ************* send robot urdf to param server ************* -->
