@@ -11,8 +11,7 @@ class Segmentor:
     def __init__(self, sim=True):
         self.pc_input = rospy.Subscriber("/camera/depth/points", PointCloud2,
         self.callback)
-        self.viewer = pcl.pcl_visualization.CloudViewing()
-        self.objects = {}
+        self.cloud_list = []
         self.sim = sim
         self.objects = []
 
@@ -23,6 +22,7 @@ class Segmentor:
         else:
             field_names = [field.name for field in msg.fields]
         list_pc = list(pc2.read_points(msg, skip_nans=True, field_names=field_names))
+        self.cloud_list = list_pc
         cloud.from_list(list_pc)
         cloud_objects = self.Segmentation(self.Segmentation(cloud))
         self.objects = self.EuclideanCluster(cloud_objects)
@@ -74,6 +74,7 @@ class Segmentor:
         return objects
 
     def Visualization(self, cloud):
+        self.viewer = pcl.pcl_visualization.CloudViewing()
         self.viewer.ShowMonochromeCloud(cloud, b'Sample Cloud')
 
 

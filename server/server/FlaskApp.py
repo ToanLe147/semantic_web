@@ -70,5 +70,5 @@ def handle_relationship(msg):
 
 
 if __name__ == '__main__':
-    socketio.run(app, host="192.168.100.16")
-    # socketio.run(app, host="localhost")
+    # socketio.run(app, host="192.168.100.16")
+    socketio.run(app, host="localhost")

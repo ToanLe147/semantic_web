@@ -2,7 +2,7 @@
 
 
 
-import rospy, sys, numpy as np
+import rospy, numpy as np
 import geometry_msgs.msg
 import moveit_msgs.msg
 from ur5_notebook.msg import Tracker
@@ -143,6 +143,7 @@ def gripper_off():
     except rospy.ServiceException, e:
         print "Service call failed: %s" % e
 
+
 def gripper1_off():
     rospy.wait_for_service('/ur5/vacuum_gripper1/off')
     try:
@@ -172,6 +173,7 @@ def gripper3_off():
     except rospy.ServiceException, e:
         print "Service call failed: %s" % e
 
+
 def gripper4_off():
     rospy.wait_for_service('/ur5/vacuum_gripper4/off')
     try:
@@ -191,6 +193,7 @@ def gripper5_off():
     except rospy.ServiceException, e:
         print "Service call failed: %s" % e
 
+
 def gripper6_off():
     rospy.wait_for_service('/ur5/vacuum_gripper6/off')
     try:
@@ -209,6 +212,7 @@ def gripper7_off():
         return resp
     except rospy.ServiceException, e:
         print "Service call failed: %s" % e
+
 
 def gripper8_off():
     rospy.wait_for_service('/ur5/vacuum_gripper8/off')

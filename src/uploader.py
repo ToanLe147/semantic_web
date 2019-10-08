@@ -25,17 +25,17 @@ class ontology():
           param argv:     data of property - string
         '''
         if argv:
-            value = argv[0]
+            value = '"' + '{}'.format(argv[0]) + '"'
         else:
             value = ""
 
         # Prepair message.
         update = ('DELETE '
-                  + 'WHERE { '
+                  + 'WHERE {'
                   + 'kbase:{} kbase:{} ?DATA'.format(name, property)
                   + '};'
                   + 'INSERT'
-                  + 'DATA { '
+                  + 'DATA {'
                   + 'kbase:{} kbase:{} {}'.format(name, property, value)
                   + '}')
 
@@ -43,7 +43,7 @@ class ontology():
         msg = {'update': self.prefix + update}
         r = requests.post(url=self.ontology_server+'update', headers=self.header, data=msg)
         if r.status_code == 200:
-            print("True")
+            print("Property updated")
             return "Property updated"
 
     def handle_instance(self, name, type, action):
