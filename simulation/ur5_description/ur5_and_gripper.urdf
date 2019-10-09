@@ -636,10 +636,9 @@
     <child link="tool0"/>
   </joint>
   <link name="world"/>
-  <joint name="world_joint" type="fixed">
+  <joint name="fixed_base" type="fixed">
     <parent link="world"/>
     <child link="base_link"/>
-    <origin rpy="0.0 0.0 -1.57" xyz="1.15 1.0 1.0"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
   </joint>
 </robot>
-

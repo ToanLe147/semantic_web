@@ -18,12 +18,11 @@
     wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
   />
 
-  <link name="world" />
-
-  <joint name="world_joint" type="fixed">
+  <link name="world"/>
+  <joint name="fixed_base" type="fixed">
     <parent link="world"/>
     <child link="base_link"/>
-    <origin rpy="0.0 0.0 -1.57" xyz="1.15 1.0 1.0"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
   </joint>
 
 </robot>
