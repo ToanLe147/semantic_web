@@ -14,7 +14,6 @@ perception = ontology()
 while not rospy.is_shutdown():
     if kinect.update_trigger == 1:
         perception.update_property("DemonstrationLearning_Task", "Data", kinect.scene)
-        on = 0
 
 # Keep rospy running
 rospy.spin()

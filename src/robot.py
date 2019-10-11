@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+# This script is subscriber of /hololens topic, which is published from HoloLens user.
+# The code is written based on Moveit's move_group_Python_interface.py
+# Student: Toan Le - 267945
+# Course: Robot Project Work 2018-2019
+
+
 import sys
 import copy
 import rospy
@@ -32,8 +38,9 @@ def move_ur5(msg, args):
     print('========= PLANNING ==========')
 
     desired_pose = msg.position
-    desired_orientation = msg.orientation
+    #desired_orientation = msg.orientation
     print(desired_pose)
+    #print(desired_orientation)
     print('========================================================')
 
     # ==================================== Cartesian Move Done
@@ -54,7 +61,7 @@ def move_ur5(msg, args):
     poseTarget.position.z = desired_pose.z
 
     # orientation
-    poseTarget.orientation = desired_orientation
+    #poseTarget.orientation = desired_orientation
 
     waypoint.append(copy.deepcopy(poseTarget))
 
@@ -68,27 +75,20 @@ def move_ur5(msg, args):
 
     # Compute Cartesian path. The return value is a tuple: a fraction of how much of the path was followed, the actual
     # RobotTrajectory.
-    (plan, fraction) = ur5.compute_cartesian_path(
-        waypoint,  # waypoints to follow
-        0.01,  # eef_step, which is set to 0.01m ~ 1 cm
-        0.0,  # jump_threshold, which is set to 0 to disable it. The jump_threshold specifies the maximum distance in
-        # configuration space between consecutive points in the resulting path
-        True  # collisions avoiding
-    )
+    # (plan, fraction) = ur5.compute_cartesian_path(
+    #     waypoint,  # waypoints to follow
+    #     0.01,  # eef_step, which is set to 0.01m ~ 1 cm
+    #     0.0,  # jump_threshold, which is set to 0 to disable it. The jump_threshold specifies the maximum distance in
+    #     # configuration space between consecutive points in the resulting path
+    # )
 
-    if 1 - fraction < 0.2:
-        rospy.loginfo("Path computed successfully. Moving the arm.")
-        num_pts = len(plan.joint_trajectory.points)
-        rospy.loginfo("\n# intermediate waypoints = " + str(num_pts))
-
-        print('===== MOVING =====')
-        ur5.execute(plan, wait=True)
-        # ur5.go()
-        rospy.loginfo("Path execution complete.")
-        rospy.loginfo('followed ' + str(fraction*100) + '% of requested trajectory')  # fraction: rate of successful requested
-        # trajectory is followed
-    else:
-        rospy.loginfo("Path planning failed")
+    # ur5.execute(plan, wait=True)
+    ur5.set_pose_target(poseTarget)
+    plan = ur5.go(wait=True)
+    ur5.stop()
+    # It is always good to clear your targets after planning with poses.
+    # Note: there is no equivalent function for clear_joint_value_targets()
+    ur5.clear_pose_targets()
 
     print('==== ROBOT STATE AFTER MOVING ====')
     print(robot.get_current_state().joint_state.position)
@@ -107,7 +107,6 @@ def subscriber():
     moveit_commander.roscpp_initialize(sys.argv)
     rospy.init_node('ur5_cartesian_pose', anonymous=True)
 
-
     # Instantiate a RobotCommander object.  This object is an interface to the robot as a whole.
     robot = moveit_commander.RobotCommander()
 
@@ -116,6 +115,8 @@ def subscriber():
 
     # Instantiate UR5 as group of joints. This interface can be used to plan and execute motion of UR5
     ur5 = moveit_commander.MoveGroupCommander('manipulator')
+    ur5.set_named_target('home')
+    plan1 = ur5.go()
 
     # Print some features of UR5
     print('======= Reference frame:', ur5.get_planning_frame())
@@ -129,7 +130,7 @@ def subscriber():
     print(ur5.get_current_pose().pose)
     print('=============')
 
-    rospy.Subscriber('hololens', geometry_msgs.msg.Pose, move_ur5, (robot, ur5), queue_size = 1)
+    rospy.Subscriber('target_pose', geometry_msgs.msg.Pose, move_ur5, (robot, ur5), queue_size = 1)
 
     rospy.spin()
 
@@ -143,6 +144,3 @@ if __name__ == '__main__':
         moveit_commander.roscpp_shutdown()
         print('==== STOPPING ====')
         pass
-
-
-# MOVING FROM [0.8 0.2 0.01] TO [-0.8 0.2 0.01] IS DANGEROUS

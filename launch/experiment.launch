@@ -10,7 +10,7 @@
   <!-- ************* startup simulated world ************* -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" default="$(find semantic_web)/simulation/$(arg world).world"/>
-    <arg name="paused" value="$(arg paused)"/>    
+    <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
 
@@ -22,11 +22,11 @@
   <!-- ************* send robot urdf to param server ************* -->
   <!-- <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5_limited.urdf"/> -->
   <rosparam command="load" ns="robot_description" file="$(find semantic_web)/simulation/ur5_description/ur5_and_gripper_limited.urdf"/>
-  <node name="rviz_ur5_view" pkg="tf" type="static_transform_publisher" args="1.5 1.0 1.1 -1.57 0 0 world base_link 100" />
+  <node name="rviz_ur5_view" pkg="tf" type="static_transform_publisher" args="1.5 1.0 1.05 -1.57 0 0 world base_link 100" />
 
   <!-- ************* push robot_description to factory and spawn robot in gazebo ************* -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
-      args="-urdf -param robot_description -model ur5 -x 1.5 -y 1.0 -z 1.1 -Y -1.57"
+      args="-urdf -param robot_description -model ur5 -x 1.5 -y 1.0 -z 1.05 -Y -1.57"
       respawn="false"
       output="screen" />
 
@@ -39,10 +39,15 @@
   <remap if="$(arg sim)" from="/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
 
   <!-- ************* Launch moveit ************* -->
-  <include file="$(find ur5_moveit_config)/launch/move_group.launch">
+  <include file="$(find semantic_web)/simulation/ur5_moveit_config/launch/move_group.launch">
     <arg name="limited" default="$(arg limited)"/>
     <arg name="debug" default="$(arg debug)" />
   </include>
+
+  <node pkg="semantic_web" type="robot.py" name="ur5_pose" output="screen"
+    launch-prefix="gnome-terminal --command"/>
+  <node pkg="semantic_web" type="talker_ur5.py" name="psuedo_ur5" output="screen"
+    launch-prefix="gnome-terminal --command"/>
 
   <!--  ************* Visualisation ************  -->
   <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>

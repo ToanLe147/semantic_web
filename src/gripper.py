@@ -1,57 +1,61 @@
 #!/usr/bin/env python
 import rospy
-from std_srvs.srv import Empty
+from gazebo_ros_link_attacher.srv import Attach, AttachRequest
 
 
 class gripper:
-    def __init__(self, name, quality):
-        self.name = name  # /ur5/vacuum_gripper
-        self.number_of_gripper = quality  # 9
-        self.status_sub = rospy.Subscriber("", self.gripper_status)
-        self.trigger_sub = rospy.Subscriber("", self.trigger)
-        self.status = "off"
-        self.trigger_status = 0
+    def __init__(self):
+        self.status = False
+        self.common_link = "link"
+        self.gripper = "wrist_3_link"
+        self.attach_srv = rospy.ServiceProxy('/link_attacher_node/attach',
+                                    Attach)
+        self.detach_srv = rospy.ServiceProxy('/link_attacher_node/detach',
+                                    Attach)
+        self.holding_object = ""
 
-    def gripper_status(self, msg):
-        if msg.data:
-            self.status = msg.data
+    def pick(self, object):
+        req = AttachRequest()
+        self.status = True
+        req.model_name_1 = self.gripper
+        req.link_name_1 = self.common_link
+        req.model_name_2 = object
+        req.link_name_2 = self.common_link
+        self.attach_srv.call(req)
+        self.holding_object = object
+        return self.status
 
-    def trigger(self, msg):
-        self.trigger_status = msg.data
-        if self.trigger_status:
-            self.combination(True)
-        else:
-            self.combination(False)
+    def place(self):
+        req = AttachRequest()
+        self.status = False
+        req.model_name_1 = self.gripper
+        req.link_name_1 = self.common_link
+        req.model_name_2 = self.holding_object
+        req.link_name_2 = self.common_link
+        self.detach_srv.call(req)
+        self.holding_object = ""
+        return self.status
 
-    def combination(self, on):
-        for i in range(self.number_of_gripper):
-            if on:
-                self.gripper_on(str(i))
-            else:
-                self.gripper_off(str(i))
 
-    def gripper_on(self, index):
-        gripper_sv = self.name + index + '/on'
-        # Wait till the srv is available
-        rospy.wait_for_service(gripper_sv)
-        try:
-            # Create a handle for the calling the srv
-            turn_on = rospy.ServiceProxy(gripper_sv, Empty)
-            # Use this handle just like a normal function and call it
-            resp = turn_on()
-            return resp
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
+def main():
+    rospy.init_node("hack_gripper", anonymous=True)
+    gripper_ur5 = gripper()
+    gripper_ur5.attach_srv.wait_for_service()
+    gripper_ur5.detach_srv.wait_for_service()
 
-    def gripper_off(self, index):
-        gripper_sv = self.name + index + '/off'
-        # Wait till the srv is available
-        rospy.wait_for_service(gripper_sv)
-        try:
-            # Create a handle for the calling the srv
-            turn_off = rospy.ServiceProxy(gripper_sv, Empty)
-            # Use this handle just like a normal function and call it
-            resp = turn_off()
-            return resp
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
+    while not rospy.is_shutdown():
+        command = int(raw_input("Command: "))
+        if command == 1:
+            object = input("object: ")
+            status = gripper_ur5.pick(object)
+            rospy.loginfo("Gripper status (True: close, False: open): ", status)
+
+        if command == 0:
+            status = gripper_ur5.place()
+            rospy.loginfo("Gripper status (True: close, False: open): ", status)
+
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    main()

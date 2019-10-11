@@ -39,7 +39,7 @@ class Camera:
                 self.detect()
                 # print(self.detected)
                 self.scan()
-                # self.visual()
+                self.visual()
                 # for i in list(self.scene.keys()):
                 #     print("{}: {}".format(i, self.scene[i].keys()))
                 # print("==================")
@@ -105,10 +105,9 @@ class Camera:
         else:
             # print("*****")
             self.update_trigger = 0
-            return
 
     def update_name(self, name, value, centroid):
-        index = 0
+        index = -1  # add index number Zero to sync with Gazebo experiment
         name_list = list(self.detected.keys())
         # Check the name and value of detected shape in current list
         if not self.detected:
@@ -143,7 +142,7 @@ class Camera:
 
     def get_center_point(self, list_of_points):
         # Get size of image frame
-        w, h, _ = self.img.shape
+        h, w, _ = self.img.shape
         # Get pointcloud data from pixel coordinates of image frame
         points_list = Scene_3D.cloud_list
         x = [p[0] for p in list_of_points]
