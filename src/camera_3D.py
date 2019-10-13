@@ -69,8 +69,8 @@ class Segmentor:
             cloud_cluster.from_list(cloud_cluster_list)
             objects.append(cloud_cluster)
 
-            print('indices {} = '.format(j) + str(len(cloud_cluster_list)))
-        print('=====')
+            # print('indices {} = '.format(j) + str(len(cloud_cluster_list)))
+        # print('=====')
         return objects
 
     def Visualization(self, cloud):

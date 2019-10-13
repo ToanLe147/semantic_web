@@ -44,11 +44,6 @@
     <arg name="debug" default="$(arg debug)" />
   </include>
 
-  <node pkg="semantic_web" type="robot.py" name="ur5_pose" output="screen"
-    launch-prefix="gnome-terminal --command"/>
-  <node pkg="semantic_web" type="talker_ur5.py" name="psuedo_ur5" output="screen"
-    launch-prefix="gnome-terminal --command"/>
-
   <!--  ************* Visualisation ************  -->
   <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>
 

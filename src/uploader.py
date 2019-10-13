@@ -4,7 +4,7 @@ import json
 import ast  # convert string represent python expression to python expression
 
 
-class ontology():
+class Ontology():
     def __init__(self):
         # self.ontology_server = 'http://192.168.100.16:3030/Brainstorm/'
         self.ontology_server = 'http://localhost:3030/Brainstorm/'

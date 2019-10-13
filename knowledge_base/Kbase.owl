@@ -35,7 +35,10 @@
 
     <!-- http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#left_of -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#left_of"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#left_of">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#Object"/>
+    </owl:ObjectProperty>
     
 
 

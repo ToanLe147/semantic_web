@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="semantic_web" type="robot.py" name="ur5_pose" output="screen"
+    launch-prefix="gnome-terminal --command"/>
+  <node pkg="semantic_web" type="talker_ur5.py" name="psuedo_ur5" output="screen"
+    launch-prefix="gnome-terminal --command"/>
+</launch>

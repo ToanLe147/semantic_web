@@ -5,7 +5,7 @@ from collections import OrderedDict
 import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-from scene_3D_handler import Segmentor
+from camera_3D import Segmentor
 import tf
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import String
@@ -18,23 +18,23 @@ class Camera:
     def __init__(self):
         self.image_input = rospy.Subscriber("/camera/rgb/image_color", Image,
         self.callback)
-        self.image_input = rospy.Subscriber("chatter", String, self.trigger)
+        self.image_input = rospy.Subscriber("detect_image", String, self.trigger)
         self.bridge = CvBridge()
-        self.tf_handler = tf.TransformListener()
         self.scene = []
+        self.tf_handler = tf.TransformListener()
         self.previous_scene = OrderedDict()
         self.detected = OrderedDict()
         self.update_trigger = 0
-        self.test_trigger = 0  # Added for testing
+        self.image_trigger = 0  # Added for testing
 
     def trigger(self, msg):
-        self.test_trigger = int(msg.data)
-        return self.test_trigger
+        self.image_trigger = int(msg.data)
+        return self.image_trigger
 
     def callback(self, msg):
         try:
             img = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-            if self.test_trigger == 1:
+            if self.image_trigger == 1:
                 self.img = img
                 self.detect()
                 # print(self.detected)
@@ -46,6 +46,7 @@ class Camera:
             else:
                 # print("Scanning")
                 cv2.destroyAllWindows()
+            # print(self.image_trigger)
         except CvBridgeError as e:
             print(e)
 
@@ -94,6 +95,7 @@ class Camera:
             self.previous_scene.update(self.detected)
             self.scene = self.detected.items()
             print("Update Initial Scene")
+            self.image_trigger = 0
         elif len(self.previous_scene) < len(self.detected):
             # print("===============")
             self.update_trigger = 1
@@ -102,6 +104,7 @@ class Camera:
             # Update scene for query
             self.scene = self.detected.items()
             print("Update New Object Scene")
+            self.image_trigger = 0
         else:
             # print("*****")
             self.update_trigger = 0
@@ -163,6 +166,7 @@ class Camera:
         pt.point.y = point[1]
         pt.point.z = point[2]
         # Transform
+        self.tf_handler.waitForTransform(src_frame, target_frame, rospy.Time.now(), rospy.Duration(0.5))
         rs_point = self.tf_handler.transformPoint(target_frame, pt)
         # Convert PointStamped result to list
         result = [rs_point.point.x, rs_point.point.y, rs_point.point.z]
