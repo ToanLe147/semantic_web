@@ -13,7 +13,6 @@ if __name__ == '__main__':
         kinect = Camera()
         perception = Ontology()
         ur5 = Robot()
-        # ur5.update_planning_scene()
         gripper = Gripper()
 
         # Update perception data

@@ -5,11 +5,13 @@
   <arg name="sim" default="true" />
   <arg name="debug" default="false" />
   <arg name="rviz" default="true" />
-  <arg name="world" default="experiment_scene" />
+  <!-- true:hsv world, false: detection world -->
+  <arg name="hsv_world" default="false" />
 
   <!-- ************* startup simulated world ************* -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find semantic_web)/simulation/$(arg world).world"/>
+    <arg unless="$(arg hsv_world)" name="world_name" default="$(find semantic_web)/simulation/experiment_scene.world"/>
+    <arg if="$(arg hsv_world)" name="world_name" default="$(find semantic_web)/simulation/experiment_scene_hsv.world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
