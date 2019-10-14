@@ -5,16 +5,24 @@ import copy
 import rospy
 import numpy as np
 import moveit_commander
-import geometry_msgs.msg
+from geometry_msgs.msg import PoseStamped, Pose
+from moveit_msgs.msg import PlanningScene
 
 
 class Robot:
     def __init__(self):
         # Initial setup for UR5
         moveit_commander.roscpp_initialize(sys.argv)
-        rospy.Subscriber('target_pose', geometry_msgs.msg.Pose, self.move)
+        rospy.Subscriber('target_pose', Pose, self.move)
         self.robot = moveit_commander.RobotCommander()
+
         self.scene = moveit_commander.PlanningSceneInterface()
+        # Create a scene publisher to push changes to the scene
+        self.scene_pub = rospy.Publisher("planning_scene", PlanningScene)
+        # Adding obstacles to Planning Scene
+        # self.add_obstacle("table", [0.8, 1.4, 1.02], [2, 1, 0.501])
+        # self.add_obstacle("picking_base", [0.3, 1, 1.12], [0.9, 0.7, 0.56])
+
         self.ur5 = moveit_commander.MoveGroupCommander('manipulator')
         self.ur5.set_pose_reference_frame("base_link")
         self.end_effector = self.ur5.get_end_effector_link()
@@ -30,9 +38,30 @@ class Robot:
         self.ur5.set_named_target('home')
         self.ur5.go()
 
+    def update_planning_scene(self):
+        scene = PlanningScene()
+        scene.is_diff = True
+        self.scene_pub.publish(scene)
+
+    def add_obstacle(self, name, size, pose):  # Add boxes
+        box_pose = PoseStamped()
+        box_pose.header.frame_id = "base_link"
+        box_pose.pose.position.x = pose[0]
+        box_pose.pose.position.y = pose[1]
+        box_pose.pose.position.z = pose[2]
+        box_pose.pose.orientation.x = pose[3]
+        box_pose.pose.orientation.y = pose[4]
+        box_pose.pose.orientation.z = pose[5]
+        box_pose.pose.orientation.w = pose[6]
+        box_name = name
+        self.scene.add_box(box_name, box_pose, size=tuple(size))
+        self.update_planning_scene()
+        print("add ", name)
+
     def visual(self, *desired_pose):
         print('========= TARGET POINT ==========')
         print(desired_pose)
+        print(self.scene.get_known_object_names())
 
         print('======= ROBOT STATE =======')
         print(self.robot.get_current_state().joint_state.position)
@@ -96,6 +125,13 @@ if __name__ == '__main__':
     try:
         rospy.init_node('ur5_cartesian_pose', anonymous=True)
         ur5 = Robot()
+        # Adding obstacles to Planning Scene
+        raw_input("add Table")
+        ur5.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.549, 0, 0, 0.7071068, 0.7071068])
+        raw_input("add picking base")
+        ur5.add_obstacle("picking_base", [0.3, 1, 1.12], [0.3, -0.6, -0.49, 0, 0, 0.7071068, 0.7071068])
+        raw_input("add box below")
+        ur5.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.55, 0, 0, 0.7071068, 0.7071068])
         rospy.spin()
 
     except rospy.ROSInterruptException:
@@ -103,3 +139,16 @@ if __name__ == '__main__':
         moveit_commander.roscpp_shutdown()
         print('==== STOPPING ====')
         pass
+
+
+# class Robot:
+#     def __init__(self):
+#         rospy.Subscriber('target_pose', geometry_msgs.msg.Pose, self.move)
+#         self.ur5 = MoveGroupInterface("manipulator", "base_link")
+#         self.scene = PlanningSceneInterface("base_link")
+#         self.scene.addBox("table", 0.8, 1.4, 1.02, 0.5, 0, -0.5)
+#         self.scene.addBox("picking_base", 0.3, 1, 1.12, -0.6, -0.3, -0.56)
+#         self.scene.waitForSync()
+#
+#     def move(self, msg):
+#         print("test")
