@@ -17,11 +17,13 @@ class Robot:
         self.robot = moveit_commander.RobotCommander()
 
         self.scene = moveit_commander.PlanningSceneInterface()
-        # Create a scene publisher to push changes to the scene
-        self.scene_pub = rospy.Publisher("planning_scene", PlanningScene)
         # Adding obstacles to Planning Scene
-        # self.add_obstacle("table", [0.8, 1.4, 1.02], [2, 1, 0.501])
-        # self.add_obstacle("picking_base", [0.3, 1, 1.12], [0.9, 0.7, 0.56])
+        # self.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.549, 0, 0, 0.7071068, 0.7071068])
+        # self.update_planning_scene("table", True, 4)
+        # self.add_obstacle("picking_base", [0.3, 1, 1.12], [0.3, -0.6, -0.49, 0, 0, 0.7071068, 0.7071068])
+        # self.update_planning_scene("picking_base", True, 4)
+        # self.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.55, 0, 0, 0.7071068, 0.7071068])
+        # self.update_planning_scene("robot_base", True, 4)
 
         self.ur5 = moveit_commander.MoveGroupCommander('manipulator')
         self.ur5.set_pose_reference_frame("base_link")
@@ -38,10 +40,18 @@ class Robot:
         self.ur5.set_named_target('home')
         self.ur5.go()
 
-    def update_planning_scene(self):
-        scene = PlanningScene()
-        scene.is_diff = True
-        self.scene_pub.publish(scene)
+    def update_planning_scene(self, name, box_is_known, timeout=4):
+        box_name = name
+        scene = self.scene
+        start = rospy.get_time()
+        seconds = rospy.get_time()
+        while(seconds - start < timeout) and not (rospy.is_shutdown):
+            is_known = box_name in scene.get_known_object_names()
+            if box_is_known == is_known:
+                return True
+            rospy.sleep(0.1)
+            seconds = rospy.get_time()
+        return False
 
     def add_obstacle(self, name, size, pose):  # Add boxes
         box_pose = PoseStamped()
@@ -55,8 +65,6 @@ class Robot:
         box_pose.pose.orientation.w = pose[6]
         box_name = name
         self.scene.add_box(box_name, box_pose, size=tuple(size))
-        self.update_planning_scene()
-        print("add ", name)
 
     def visual(self, *desired_pose):
         print('========= TARGET POINT ==========')
@@ -139,16 +147,3 @@ if __name__ == '__main__':
         moveit_commander.roscpp_shutdown()
         print('==== STOPPING ====')
         pass
-
-
-# class Robot:
-#     def __init__(self):
-#         rospy.Subscriber('target_pose', geometry_msgs.msg.Pose, self.move)
-#         self.ur5 = MoveGroupInterface("manipulator", "base_link")
-#         self.scene = PlanningSceneInterface("base_link")
-#         self.scene.addBox("table", 0.8, 1.4, 1.02, 0.5, 0, -0.5)
-#         self.scene.addBox("picking_base", 0.3, 1, 1.12, -0.6, -0.3, -0.56)
-#         self.scene.waitForSync()
-#
-#     def move(self, msg):
-#         print("test")
