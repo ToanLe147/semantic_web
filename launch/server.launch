@@ -1,4 +1,7 @@
 <launch>
+  <!--  ************* Create connection with web UI ************  -->
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
   <!-- ************* FlaskApp Server ************* -->
   <node name="semantic_server" pkg="semantic_web" type="FlaskApp.py" respawn="true" output="screen" />
 

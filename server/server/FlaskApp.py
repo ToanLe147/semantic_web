@@ -1,14 +1,27 @@
 #!/usr/bin/env python
+# ######### Edit modpath to get correct directory
 from flask import Flask, render_template
 import sys
 modpath = '/home/nico/catkin_ws/src/semantic_web/src'
 sys.path.insert(0, modpath)
 from flask_socketio import SocketIO
-from uploader import ontology
-
+from uploader import Ontology
+import roslibpy
 app = Flask(__name__)
+
+# Initialize SocketIO
 socketio = SocketIO(app)
-KnowledgeBase = ontology()
+KnowledgeBase = Ontology()
+
+# Connect with ROS
+client = roslibpy.Ros(host='localhost', port=9090)
+client.run()
+
+# ROS topic to control the system
+camera_scan = roslibpy.Topic(client, 'detect_image', 'std_msgs/String')
+robot_move = roslibpy.Topic(client, 'target_pose', 'geometry_msgs/Pose')
+camera_scan.advertise()
+robot_move.advertise()
 
 
 @app.route('/')
@@ -67,6 +80,13 @@ def handle_relationship(msg):
         res = KnowledgeBase.handle_relationship(data)
     if data:
         socketio.emit('server_response', res, callback="Message Received")
+
+
+@socketio.on('learning_trigger')
+def learning_trigger(trigger):
+    msg = roslibpy.Message({'data': str(trigger["trigger"])})
+    camera_scan.publish(msg)
+    print("Btn pressed")
 
 
 if __name__ == '__main__':

@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='TrianglePiece'>
-    <link name='link_3'>
+  <model name='Picking_base'>
+    <link name='link'>
       <pose frame=''>0 0 0 0 -0 0</pose>
       <inertial>
-        <mass>0.05</mass>
+        <mass>1</mass>
         <inertia>
           <ixx>0.166667</ixx>
           <ixy>0</ixy>
@@ -15,38 +15,29 @@
         </inertia>
         <pose frame=''>0 0 0 0 -0 0</pose>
       </inertial>
-      <gravity>1</gravity>
       <self_collide>0</self_collide>
       <kinematic>0</kinematic>
+      <gravity>1</gravity>
       <visual name='visual'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
-          <polyline>
-            <height>0.01</height>
-            <point>0.046669650 -0.0560035</point>
-            <point>0.00112007 -0.02867385</point>
-            <point>-0.02650835 -0.01209675</point>
-            <point>-0.04069595 -0.003584230</point>
-            <point>-0.04592295 -0.0004480285</point>
-            <point>-0.04666965000000001 0.0</point>
-            <point>0.046669650 0.0560035</point>
-            <point>0.046669650 -0.0560035</point>
-          </polyline>
+          <box>
+            <size>0.3 1 1.12</size>
+          </box>
         </geometry>
         <material>
-          <lighting>1</lighting>
           <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
             <name>Gazebo/Grey</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
           </script>
-          <ambient>0 0 1 1</ambient>
-          <diffuse>0 0 1 1</diffuse>
-          <specular>0 0 1 1</specular>
+          <ambient>0 0.3 0.3 1</ambient>
+          <diffuse>0 0.7 0.7 1</diffuse>
+          <specular>0 0.01 0.01 1</specular>
           <emissive>0 0 0 1</emissive>
           <shader type='vertex'>
             <normal_map>__default__</normal_map>
           </shader>
         </material>
+        <pose frame=''>0 0 0 0 -0 0</pose>
         <cast_shadows>1</cast_shadows>
         <transparency>0</transparency>
       </visual>
@@ -55,17 +46,9 @@
         <max_contacts>10</max_contacts>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
-          <polyline>
-            <height>0.01</height>
-            <point>0.046669650 -0.0560035</point>
-            <point>0.00112007 -0.02867385</point>
-            <point>-0.02650835 -0.01209675</point>
-            <point>-0.04069595 -0.003584230</point>
-            <point>-0.04592295 -0.0004480285</point>
-            <point>-0.04666965000000001 0.0</point>
-            <point>0.046669650 0.0560035</point>
-            <point>0.046669650 -0.0560035</point>
-          </polyline>
+          <box>
+            <size>0.296101 1 1.13084</size>
+          </box>
         </geometry>
         <surface>
           <friction>

@@ -44,7 +44,7 @@
   <include file="$(find semantic_web)/simulation/ur5_moveit_config/launch/move_group.launch">
     <arg name="limited" default="$(arg limited)"/>
     <arg name="debug" default="$(arg debug)" />
-  </include>
+  </include>  
 
   <!--  ************* Visualisation ************  -->
   <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_web)/rviz/experiment.rviz"/>

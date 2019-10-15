@@ -40,7 +40,7 @@ class Gripper:
 
 def main():
     rospy.init_node("hack_gripper", anonymous=True)
-    gripper_ur5 = gripper()
+    gripper_ur5 = Gripper()
 
     while not rospy.is_shutdown():
         command = int(raw_input("Command: "))

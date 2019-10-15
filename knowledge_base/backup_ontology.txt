@@ -1,0 +1,100 @@
+@prefix :      <http://www.semanticweb.org/nico/ontologies/2019/8/Kbase> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix kbase: <http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#> .
+
+kbase:Sensor  a  owl:Class .
+
+kbase:Move  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Object  a  owl:Class .
+
+kbase:Task  a   owl:Class .
+
+kbase:Status  a  owl:DatatypeProperty .
+
+kbase:left_of  a     owl:ObjectProperty ;
+        rdfs:domain  kbase:Object ;
+        rdfs:range   kbase:Object .
+
+kbase:has  a         owl:ObjectProperty ;
+        rdfs:domain  kbase:Sensor , kbase:Object , kbase:Gripper , kbase:Robot .
+
+kbase:Gripper  a  owl:Class .
+
+:       a       owl:Ontology .
+
+kbase:Position  a  owl:DatatypeProperty .
+
+kbase:requires  a    owl:ObjectProperty ;
+        rdfs:domain  kbase:Sensor , kbase:Object , kbase:Task , kbase:Gripper , kbase:Robot .
+
+kbase:Place  a               kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Pick  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Robot  a  owl:Class .
+
+kbase:Current_state  a  owl:DatatypeProperty .
+
+kbase:UR5  a                 owl:NamedIndividual , kbase:Robot ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Move .
+
+kbase:Vacuum_gripper  a      owl:NamedIndividual , kbase:Gripper ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Place , kbase:Pick .
+
+kbase:Scan  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Kinect  a              kbase:Sensor , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Scan .
+
+kbase:Data  a   owl:DatatypeProperty .
+
+kbase:DemonstrationLearning_Task
+        a                    kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "[('Triangle', {'Boundary': [[261, 291], [281, 325], [303, 291]], 'Centroid': [-0.10290370792744503, 0.3176392093596609, -0.02486046291064503]}), ('Pentagon', {'Boundary': [[405, 234], [432, 251], [455, 232], [444, 205], [414, 205]], 'Centroid': [0.2989835160442187, 0.5252980373522871, -0.02500951817606456]}), ('Rectangle', {'Boundary': [[289, 140], [288, 186], [336, 186], [336, 140]], 'Centroid': [-0.021411022643329423, 0.7003451297211731, -0.024610166171896264]}), ('Rectangle_0', {'Boundary': [[193, 209], [191, 256], [241, 257], [242, 209]], 'Centroid': [-0.2819027047594508, 0.5073015173581971, -0.02955907745754227]}), ('Pentagon_0', {'Boundary': [[414, 205], [405, 234], [431, 252], [455, 232], [444, 205]], 'Centroid': [0.296270731274442, 0.5252998304419096, -0.02500738934438096]})]" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:requires       kbase:UR5 , kbase:Vacuum_gripper , kbase:Kinect .
+
+kbase:Initial_state  a  owl:DatatypeProperty .
+

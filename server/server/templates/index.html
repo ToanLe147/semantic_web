@@ -54,17 +54,26 @@
 
   <div class="container-fluid p-0">
 
+    <!-- MAIN PAGE -->
     <section class="resume-section p-lg-5 align-items-center" id="main">
-        <div class="form-group">
-            <label for="Command">Input command</label>
-            <input type="command" id="InputCommand" placeholder="eg. Get object
-            on the left of table">
+        <h2>LEARNING</h2>
+        <div class="mb-5">
+            <!-- MYPOSITION -->
+            <h3 id="learning_trigger_status">...</h3>
+
+            <button id="btn_learn" class="learn btn btn-danger
+            font-weight-bold" type="button" value="learn">Learn</button>
+            <button id="btn_finish_learn" class="learn btn btn-info
+            font-weight-bold" type="button" value="finish_learn">Done</button>
+
         </div>
-        <button type="button" class="main btn btn-primary">Submit</button>
+        <h2>INSTRUCTION SCENE</h2>
+        <img id="picking_frame" src="{{ url_for('static', filename='img/picking_frame.png') }}">
     </section>
 
     <hr class="m-0">
 
+    <!-- ONTOLOGY PAGE -->
     <section class="resume-section p-lg-5 align-items-center" id="update">
 
         <h2>INSTANCE</h2>
@@ -330,6 +339,22 @@
         $(".object_relationship").append('<option selected>Choose ...</option>')
         socket.emit("refresh_relationship")
     })
+
+    // Click on LEARN and DONE btn
+    $("button#btn_learn").click(function(){
+        let trigger = 1
+        socket.emit('learning_trigger', {
+            trigger: 1
+        })
+        document.getElementById("learning_trigger_status").innerHTML = "Sent trigger"
+    })
+    $("button#btn_finish_learn").click(function(){
+        let trigger = 0
+        socket.emit('learning_trigger', {
+            trigger: 0
+        })
+        document.getElementById("learning_trigger_status").innerHTML = "Finish Learning"
+    })    
 
   </script>
 

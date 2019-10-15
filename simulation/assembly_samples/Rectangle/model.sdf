@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='PentagonPiece'>
-    <link name='link_2'>
+  <model name='Rectangle'>
+    <link name='link'>
       <pose frame=''>0 0 0 0 -0 0</pose>
       <inertial>
         <mass>0.05</mass>
@@ -23,49 +23,18 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>-0.0672045 -0.0672045</point>
+            <point>-0.0672045 0.0672045</point>
+            <point>0.0672045 0.0672045</point>
           </polyline>
         </geometry>
         <material>
           <lighting>1</lighting>
           <script>
             <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Blue</name>
-          </script>
-          <ambient>0 0 1 1</ambient>
-          <diffuse>0 0 1 1</diffuse>
-          <specular>0 0 1 1</specular>
-          <emissive>0 0 0 1</emissive>
-          <shader type='vertex'>
-            <normal_map>__default__</normal_map>
-          </shader>
-        </material>
-        <cast_shadows>1</cast_shadows>
-        <transparency>0</transparency>
-      </visual>
-      <visual name='ModelPreview_2::link_2::visual_1'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <geometry>
-          <polyline>
-            <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
-          </polyline>
-        </geometry>
-        <material>
-          <lighting>1</lighting>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Blue</name>
+            <name>Gazebo/Grey</name>
           </script>
           <ambient>0 0 1 1</ambient>
           <diffuse>0 0 1 1</diffuse>
@@ -85,12 +54,11 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>0.0672045 -0.0672045</point>
+            <point>-0.0672045 -0.0672045</point>
+            <point>-0.0672045 0.0672045</point>
+            <point>0.0672045 0.0672045</point>
           </polyline>
         </geometry>
         <surface>

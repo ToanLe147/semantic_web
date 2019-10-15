@@ -34,7 +34,7 @@ class Robot:
 
         # Allow some leeway in position (meters) and orientation (radians)
         self.ur5.set_goal_position_tolerance(0.01)
-        self.ur5.set_goal_orientation_tolerance(0.1)
+        self.ur5.set_goal_orientation_tolerance(0.01)
 
         # Guild UR5 go to ready position
         self.ur5.set_named_target('home')
@@ -110,20 +110,20 @@ class Robot:
 
         # Compute Cartesian path. The return value is a tuple: a fraction of how much of the path was followed, the actual
         # RobotTrajectory.
-        (plan, fraction) = ur5.compute_cartesian_path(
-            waypoint,  # waypoints to follow
-            0.01,  # eef_step, which is set to 0.01m ~ 1 cm
-            0.0,  # jump_threshold, which is set to 0 to disable it. The jump_threshold specifies the maximum distance in
-            # configuration space between consecutive points in the resulting path
-        )
+        # (plan, fraction) = self.ur5.compute_cartesian_path(
+        #     waypoint,  # waypoints to follow
+        #     0.01,  # eef_step, which is set to 0.01m ~ 1 cm
+        #     0.0,  # jump_threshold, which is set to 0 to disable it. The jump_threshold specifies the maximum distance in
+        #     # configuration space between consecutive points in the resulting path
+        # )
 
-        ur5.execute(plan, wait=True)
-        # self.ur5.set_pose_target(poseTarget)
-        # self.ur5.go(wait=True)
-        # self.ur5.stop()
-        # # It is always good to clear your targets after planning with poses.
-        # # Note: there is no equivalent function for clear_joint_value_targets()
-        # self.ur5.clear_pose_targets()
+        # self.ur5.execute(plan, wait=True)
+        self.ur5.set_pose_target(poseTarget)
+        self.ur5.go(wait=True)
+        self.ur5.stop()
+        # It is always good to clear your targets after planning with poses.
+        # Note: there is no equivalent function for clear_joint_value_targets()
+        self.ur5.clear_pose_targets()
 
         # Visualization
         self.visual(desired_pose)
@@ -131,15 +131,15 @@ class Robot:
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('ur5_cartesian_pose', anonymous=True)
+        rospy.init_node('ur5_gazebo_robot', anonymous=True)
         ur5 = Robot()
         # Adding obstacles to Planning Scene
         raw_input("add Table")
-        ur5.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.549, 0, 0, 0.7071068, 0.7071068])
+        ur5.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.54, 0, 0, 0.7071068, 0.7071068])
         raw_input("add picking base")
         ur5.add_obstacle("picking_base", [0.3, 1, 1.12], [0.3, -0.6, -0.49, 0, 0, 0.7071068, 0.7071068])
         raw_input("add box below")
-        ur5.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.55, 0, 0, 0.7071068, 0.7071068])
+        ur5.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.52, 0, 0, 0.7071068, 0.7071068])
         rospy.spin()
 
     except rospy.ROSInterruptException:
