@@ -26,7 +26,7 @@ robot_move.advertise()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('tasks.html')
 
 
 @socketio.on('refresh_data')
@@ -87,6 +87,32 @@ def learning_trigger(trigger):
     msg = roslibpy.Message({'data': str(trigger["trigger"])})
     camera_scan.publish(msg)
     print("Btn pressed")
+
+
+@socketio.on('generate_task')
+def generate_task(msg):
+    instance = msg["instance"]
+    property = msg["property"]
+    data = KnowledgeBase.get_property(instance, property)
+    res = eval(data)
+    data = {}
+    for shape in res:
+        # print(shape)
+        data["shape"] = shape[0]
+        data["Centroid"] = shape[1]["Centroid"]
+        socketio.emit('update_tasks_tree', data, callback="Message Received")
+
+
+@socketio.on('perform_task')
+def perform_task(msg):
+    instance = msg["instance"]
+    property = msg["property"]
+    data = KnowledgeBase.get_property(instance, property)
+    res = eval(data)
+    pos = res[1][1]["Centroid"]
+    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2), "y": round(pos[1], 2), "z": 0.05}})
+    robot_move.publish(msg_move)
+    print("perform pressed")
 
 
 if __name__ == '__main__':

@@ -1,0 +1,241 @@
+{% extends "index.html" %}
+
+{% block body %}
+<body id="page-top">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+      <span class="d-none d-lg-block">
+        <img class="img-fluid img-profile" src="{{url_for('static', filename='img/perception.png')}}" alt="">
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#main">Main</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#update">Knowledge Base</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid p-0">
+
+    <!-- MAIN PAGE -->
+    <section class="resume-section mw-100 p-lg-5 align-items-center" id="main">
+        <div class="d-flex">
+            <div class="mr-5">
+                <h2>LEARNING</h2>
+                <div class="mb-5">
+                    <!-- MYPOSITION -->
+                    <h3 id="learning_trigger_status">...</h3>
+
+                    <button id="btn_learn" class="learn btn btn-info
+                    font-weight-bold" type="button" value="learn">Learn</button>
+                    <button id="btn_finish_learn" class="learn btn btn-danger
+                    font-weight-bold" type="button" value="finish_learn">Done</button>
+
+                </div>
+                <h2>INSTRUCTION SCENE</h2>
+                <img id="picking_frame" src="{{ url_for('static', filename='img/picking_frame.png') }}">
+            </div>
+            <div>
+                <h2>TASKS</h2>
+                <div class="mb-3">
+                    <button id="btn_get_task" class="get_task btn btn-info
+                    font-weight-bold" type="button" value="get_task">Show</button>
+                    <button id="btn_perform_task" class="perform_task btn btn-primary
+                    font-weight-bold" type="button" value="perform_task">Perform</button>
+                    <button id="btn_clear_task" class="clear_task btn btn-danger
+                    font-weight-bold" type="button" value="clear_task">Clear</button>
+                </div>
+                <ul id="task_tree" class="list-group"></ul>
+            </div>
+            <div class="ml-5">
+                <h2>CURRENT SCENE</h2>
+                <div class="mb-3">
+                    <button id="btn_get_scene" class="get_scene btn btn-info
+                    font-weight-bold" type="button" value="get_scene">Show</button>
+                    <button id="btn_clear_scene" class="clear_scene btn btn-danger
+                    font-weight-bold" type="button" value="clear_scene">Clear</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="m-0">
+
+    <!-- ONTOLOGY PAGE -->
+    <section class="resume-section p-lg-5 align-items-center" id="update">
+
+        <h2>INSTANCE</h2>
+        <div class="container">
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        Instance Name
+                    </span>
+                    <input class="bg-light text-dark" type="text"
+                    id="instance_name" placeholder="eg. UR5, Kinect">
+                </div>
+
+                <div class="d-flex mb-3 ml-5">
+                    <span class="input-group-text" >
+                        Instance Type
+                    </span>
+                    <select class="custom-select bg-info text-white
+                    font-weight-bold" id="instance_type">
+                        <option value="Robot">Robot</option>
+                        <option value="Sensor">Sensor</option>
+                        <option value="Gripper">Gripper</option>
+                        <option value="Object">Object</option>
+                        <option value="Task">Task</option>
+                     </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex mb-3 shadow">
+            <button id="btn_update" class="update btn btn-success btn-block
+            font-weight-bold" type="button" value="insert">Update</button>
+        </div>
+
+        <div class="d-flex mb-5 shadow">
+            <button id="btn_delete" class="update btn btn-danger btn-block
+            font-weight-bold" type="button" value="delete">Delete</button>
+        </div>
+
+        <h3>DATA PROPERTIES</h3>
+        <div class="container mb-4">
+            <div class="row mb-3">
+
+                <div class="d-flex mb-3 mr-5">
+                    <span class="input-group-text" >
+                        Instance
+                    </span>
+                    <select class="property_instance custom-select bg-info text-light
+                    font-weight-bold" id="property_instance">
+                        <option selected>Choose ...</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 mr-5">
+                    <span class="input-group-text" >
+                        Property
+                    </span>
+                    <select class="custom-select bg-info text-light
+                    font-weight-bold" id="property_type">
+                        <option selected>Choose property</option>
+                        <option value="Initial_state">Initial_state</option>
+                        <option value="Current_state">Current_state</option>
+                        <option value="Data">Data</option>
+                        <option value="Position">Position</option>
+                        <option value="Status">Status</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        Value
+                    </span>
+                    <input class="bg-light text-dark" type="text"
+                    id="property_value" placeholder="Input property value">
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <button id="btn_update_data" class="update_data btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+            </div>
+        </div>
+
+        <h3>OBJECT PROPERTIES</h3>
+        <div class="container mb-4">
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        Instance 1
+                    </span>
+                    <select class="property_instance custom-select bg-light text-dark
+                    font-weight-bold" id="instance1">
+                        <option selected>Choose ...</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 ml-5">
+                    <span class="input-group-text" >
+                        Relationship
+                    </span>
+                    <select class="object_relationship custom-select bg-info text-white
+                    font-weight-bold" id="object_relationship">
+                        <option selected>Choose relationship</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <span class="input-group-text" >
+                        Instance 2
+                    </span>
+                    <select class="property_instance custom-select bg-light text-dark
+                    font-weight-bold" id="instance2">
+                        <option selected>Choose ...</option>
+                     </select>
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <button id="btn_update_rel" class="btn_update_rel btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        New Relationship
+                    </span>
+                    <input class="bg-light text-dark" type="text"
+                    id="new_relationship" placeholder="eg. left_of, right_of">
+                </div>
+
+                <div class="d-flex mb-3 ml-3 shadow">
+                    <button id="btn_update_new_rel" class="btn_update_new_rel btn btn-success btn-block
+                    font-weight-bold" type="button" value="update">Update</button>
+                </div>
+
+            </div>
+        </div>
+
+        <h3>MONITOR <i class="fas fa-exchange-alt"></i></h3>
+        <div class="container">
+            <div class="row">
+                <div class="d-flex mb-3 shadow">
+                    <span class="input-group-text" >
+                        User Request
+                    </span>
+                    <span class="input-group-text text-white bg-dark"
+                    id="request">...</span>
+                </div>
+
+                <div class="d-flex mb-3 ml-5 shadow">
+                    <span class="input-group-text" >
+                        Server Response
+                    </span>
+                    <span class="input-group-text text-white bg-dark"
+                    id="server_response">...</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+  </div>
+
+  {% block content %}{% endblock %}
+
+</body>
+{% endblock %}
