@@ -45,6 +45,16 @@
                 <img id="picking_frame" src="{{ url_for('static', filename='img/picking_frame.png') }}">
             </div>
             <div>
+                <h2>CURRENT SCENE</h2>
+                <div class="mb-3">
+                    <button id="btn_get_scene" class="get_scene btn btn-info
+                    font-weight-bold" type="button" value="get_scene">Show</button>                    
+                    <button id="btn_clear_scene" class="clear_scene btn btn-danger
+                    font-weight-bold" type="button" value="clear_scene">Clear</button>
+                </div>
+                <ul id="scene_tree" class="list-group"></ul>
+            </div>
+            <div class="ml-5">
                 <h2>TASKS</h2>
                 <div class="mb-3">
                     <button id="btn_get_task" class="get_task btn btn-info
@@ -55,15 +65,6 @@
                     font-weight-bold" type="button" value="clear_task">Clear</button>
                 </div>
                 <ul id="task_tree" class="list-group"></ul>
-            </div>
-            <div class="ml-5">
-                <h2>CURRENT SCENE</h2>
-                <div class="mb-3">
-                    <button id="btn_get_scene" class="get_scene btn btn-info
-                    font-weight-bold" type="button" value="get_scene">Show</button>
-                    <button id="btn_clear_scene" class="clear_scene btn btn-danger
-                    font-weight-bold" type="button" value="clear_scene">Clear</button>
-                </div>
             </div>
         </div>
     </section>

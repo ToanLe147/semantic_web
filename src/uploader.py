@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import requests
 import json
-import ast  # convert string represent python expression to python expression
 
 
 class Ontology():
@@ -154,5 +153,4 @@ class Ontology():
         # Handle response as json type
         res = json.loads(r.content)
         result = res["results"]["bindings"][0]["value"]["value"]
-        # result = "[('Triangle', {'Boundary': [[261, 291], [281, 325], [303, 291]], 'Centroid': [-0.10290370792744503, 0.3176392093596609, -0.02486046291064503]}), ('Pentagon', {'Boundary': [[405, 234], [432, 251], [455, 232], [444, 205], [414, 205]], 'Centroid': [0.2989835160442187, 0.5252980373522871, -0.02500951817606456]}), ('Rectangle', {'Boundary': [[289, 140], [288, 186], [336, 186], [336, 140]], 'Centroid': [-0.021411022643329423, 0.7003451297211731, -0.024610166171896264]}), ('Rectangle_0', {'Boundary': [[193, 209], [191, 256], [241, 257], [242, 209]], 'Centroid': [-0.2819027047594508, 0.5073015173581971, -0.02955907745754227]}), ('Pentagon_0', {'Boundary': [[414, 205], [405, 234], [431, 252], [455, 232], [444, 205]], 'Centroid': [0.296270731274442, 0.5252998304419096, -0.02500738934438096]})]"
         return result  # result from ontology is in string type

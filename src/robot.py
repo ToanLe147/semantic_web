@@ -6,7 +6,9 @@ import rospy
 import numpy as np
 import moveit_commander
 from geometry_msgs.msg import PoseStamped, Pose
-from moveit_msgs.msg import PlanningScene
+from uploader import Ontology
+
+KnowledgeBase = Ontology()
 
 
 class Robot:
@@ -17,13 +19,6 @@ class Robot:
         self.robot = moveit_commander.RobotCommander()
 
         self.scene = moveit_commander.PlanningSceneInterface()
-        # Adding obstacles to Planning Scene
-        # self.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.549, 0, 0, 0.7071068, 0.7071068])
-        # self.update_planning_scene("table", True, 4)
-        # self.add_obstacle("picking_base", [0.3, 1, 1.12], [0.3, -0.6, -0.49, 0, 0, 0.7071068, 0.7071068])
-        # self.update_planning_scene("picking_base", True, 4)
-        # self.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.55, 0, 0, 0.7071068, 0.7071068])
-        # self.update_planning_scene("robot_base", True, 4)
 
         self.ur5 = moveit_commander.MoveGroupCommander('manipulator')
         self.ur5.set_pose_reference_frame("base_link")
@@ -39,19 +34,20 @@ class Robot:
         # Guild UR5 go to ready position
         self.ur5.set_named_target('home')
         self.ur5.go()
+        self.backup_pose()
 
-    def update_planning_scene(self, name, box_is_known, timeout=4):
-        box_name = name
-        scene = self.scene
-        start = rospy.get_time()
-        seconds = rospy.get_time()
-        while(seconds - start < timeout) and not (rospy.is_shutdown):
-            is_known = box_name in scene.get_known_object_names()
-            if box_is_known == is_known:
-                return True
-            rospy.sleep(0.1)
-            seconds = rospy.get_time()
-        return False
+    def backup_pose(self):
+        # Save previous pose
+        _pose = self.ur5.get_current_pose().pose
+        self.previous_pose = [_pose.position.x, _pose.position.y, _pose.position.z]
+        KnowledgeBase.update_property("UR5", "Initial_state", self.previous_pose)
+
+    def update_knowledgeBase(self, status):
+        # Update
+        if status:
+            current_pose = self.ur5.get_current_pose().pose
+            pose = [current_pose.position.x, current_pose.position.y, current_pose.position.z]
+            KnowledgeBase.update_property("UR5", "Current_state", pose)
 
     def add_obstacle(self, name, size, pose):  # Add boxes
         box_pose = PoseStamped()
@@ -80,6 +76,7 @@ class Robot:
         print('=============')
 
     def move(self, msg):
+        # Handle recieved message
         desired_pose = msg.position
         waypoint = []
         start_point = self.ur5.get_current_pose(self.end_effector).pose
@@ -95,10 +92,31 @@ class Robot:
         # 3rd move up/down
         poseTarget.position.z = desired_pose.z
 
-        # orientation
-        # poseTarget.orientation = desired_orientation
+        # return to previous pose
+        if desired_pose.x == desired_pose.y == desired_pose.z == -1:
+            poseTarget.position.x = round(self.previous_pose[0], 2)
+            poseTarget.position.y = round(self.previous_pose[1], 2)
+            poseTarget.position.z = round(self.previous_pose[2], 2)
+            self.ur5.set_pose_target(poseTarget)
+
+            # backup previous_pose
+            self.backup_pose()
+
+            moved_status = self.ur5.go(wait=True)
+            self.ur5.stop()
+            self.ur5.clear_pose_targets()
+
+            # Update robot state
+            self.update_knowledgeBase(moved_status)
+
+            # Visualization
+            self.visual(desired_pose)
+            return
 
         waypoint.append(copy.deepcopy(poseTarget))
+
+        # backup previous_pose
+        self.backup_pose()
 
         # Set the internal state to the current state
         self.ur5.set_start_state_to_current_state()
@@ -108,22 +126,19 @@ class Robot:
                    (poseTarget.position.z - start_point.position.z)**2) < 0.1:
             rospy.loginfo("Warnig: target position overlaps with the initial position!")
 
-        # Compute Cartesian path. The return value is a tuple: a fraction of how much of the path was followed, the actual
-        # RobotTrajectory.
-        # (plan, fraction) = self.ur5.compute_cartesian_path(
-        #     waypoint,  # waypoints to follow
-        #     0.01,  # eef_step, which is set to 0.01m ~ 1 cm
-        #     0.0,  # jump_threshold, which is set to 0 to disable it. The jump_threshold specifies the maximum distance in
-        #     # configuration space between consecutive points in the resulting path
-        # )
-
         # self.ur5.execute(plan, wait=True)
         self.ur5.set_pose_target(poseTarget)
-        self.ur5.go(wait=True)
+        if desired_pose.x == desired_pose.y == desired_pose.z == 0:
+            self.ur5.set_named_target('home')
+
+        moved_status = self.ur5.go(wait=True)
         self.ur5.stop()
         # It is always good to clear your targets after planning with poses.
         # Note: there is no equivalent function for clear_joint_value_targets()
         self.ur5.clear_pose_targets()
+
+        # Update robot state
+        self.update_knowledgeBase(moved_status)
 
         # Visualization
         self.visual(desired_pose)

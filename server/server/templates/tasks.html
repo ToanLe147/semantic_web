@@ -121,9 +121,10 @@
 
     // Click on SHOW btn
     $("button#btn_get_task").click(function(){
-        socket.emit('generate_task', {
+        socket.emit('generate_scene', {
             instance: "DemonstrationLearning_Task",
-            property: "Data"
+            property: "Data",
+            update: "update_tasks_tree"
         })
         document.getElementById("task_tree").innerHTML = ""
     })
@@ -136,7 +137,7 @@
         socket.emit('perform_task', {
             instance: "DemonstrationLearning_Task",
             property: "Data"
-        })       
+        })
     })
     // Update Task tree
     socket.on("update_tasks_tree", function(dataDict){
@@ -147,6 +148,30 @@
                             '<li class="list-group-item list-group-item-secondary">z: '+dataDict['Centroid'][2]+'</li>' +
                         '</ul>'
         $("#task_tree").append('<li class="mb-3 list-group-item list-group-item-success" value="' + shape + '">' + shape + '</li>')
+    })
+
+    // Click on SHOW scene btn
+    $("button#btn_get_scene").click(function(){
+        socket.emit('generate_scene', {
+            instance: "DemonstrationLearning_Task",
+            property: "Current_state",
+            update: "update_scene_tree"
+        })
+        document.getElementById("scene_tree").innerHTML = ""
+    })
+    // Click on CLEAR scene btn
+    $("button#btn_clear_scene").click(function(){
+        document.getElementById("scene_tree").innerHTML = ""
+    })
+    // Update scene tree
+    socket.on("update_scene_tree", function(dataDict){
+        shape = dataDict["shape"]
+        var centroid = '<ul class="list-group">' +
+                            '<li class="list-group-item list-group-item-secondary">x: '+dataDict['Centroid'][0]+'</li>' +
+                            '<li class="list-group-item list-group-item-secondary">y: '+dataDict['Centroid'][1]+'</li>' +
+                            '<li class="list-group-item list-group-item-secondary">z: '+dataDict['Centroid'][2]+'</li>' +
+                        '</ul>'
+        $("#scene_tree").append('<li class="mb-3 list-group-item list-group-item-success" value="' + shape + '">' + shape + '</li>')
     })
 
     // Click on INSTRUCTION image

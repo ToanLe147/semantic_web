@@ -20,8 +20,10 @@ client.run()
 # ROS topic to control the system
 camera_scan = roslibpy.Topic(client, 'detect_image', 'std_msgs/String')
 robot_move = roslibpy.Topic(client, 'target_pose', 'geometry_msgs/Pose')
+gripper_grasp = roslibpy.Topic(client, 'gripper/grasping', 'std_msgs/String')
 camera_scan.advertise()
 robot_move.advertise()
+gripper_grasp.advertise()
 
 
 @app.route('/')
@@ -89,18 +91,20 @@ def learning_trigger(trigger):
     print("Btn pressed")
 
 
-@socketio.on('generate_task')
-def generate_task(msg):
+@socketio.on('generate_scene')
+def generate_scene(msg):
     instance = msg["instance"]
     property = msg["property"]
+    update = msg["update"]
     data = KnowledgeBase.get_property(instance, property)
     res = eval(data)
     data = {}
+    # Later change to call Reasoner.py to generate tasks
     for shape in res:
         # print(shape)
         data["shape"] = shape[0]
         data["Centroid"] = shape[1]["Centroid"]
-        socketio.emit('update_tasks_tree', data, callback="Message Received")
+        socketio.emit(update, data, callback="Message Received")
 
 
 @socketio.on('perform_task')
@@ -109,9 +113,13 @@ def perform_task(msg):
     property = msg["property"]
     data = KnowledgeBase.get_property(instance, property)
     res = eval(data)
+    # Single move/ Later change to call Reasoner to perform tasks
     pos = res[1][1]["Centroid"]
-    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2), "y": round(pos[1], 2), "z": 0.05}})
+    object = res[1][0]
+    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2), "y": round(pos[1], 2), "z": -0.01}})
     robot_move.publish(msg_move)
+    msg_grasp = roslibpy.Message({"data": object})
+    gripper_grasp.publish(msg_grasp)
     print("perform pressed")
 
 
