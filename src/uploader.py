@@ -26,7 +26,7 @@ class Ontology():
         if argv:
             value = '"' + '{}'.format(argv[0]) + '"'
         else:
-            value = ""
+            value = '""'
 
         # Prepair message.
         update = ('DELETE '

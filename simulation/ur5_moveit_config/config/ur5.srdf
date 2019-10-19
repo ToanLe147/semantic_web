@@ -25,11 +25,11 @@
         <joint name="wrist_3_joint" value="0" />
     </group_state>
     <group_state name="up" group="manipulator">
-        <joint name="elbow_joint" value="0" />
-        <joint name="shoulder_lift_joint" value="-1.5707" />
-        <joint name="shoulder_pan_joint" value="0" />
-        <joint name="wrist_1_joint" value="-1.5707" />
-        <joint name="wrist_2_joint" value="0" />
+        <joint name="elbow_joint" value="1.35" />
+        <joint name="shoulder_lift_joint" value="-1.1" />
+        <joint name="shoulder_pan_joint" value="1.5707" />
+        <joint name="wrist_1_joint" value="-1.43287096770464" />
+        <joint name="wrist_2_joint" value="-1.5751501793910796" />
         <joint name="wrist_3_joint" value="0" />
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->

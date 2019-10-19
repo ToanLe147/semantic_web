@@ -7,6 +7,9 @@ sys.path.insert(0, modpath)
 from flask_socketio import SocketIO
 from uploader import Ontology
 import roslibpy
+from reasoner import Reasoner
+
+
 app = Flask(__name__)
 
 # Initialize SocketIO
@@ -14,16 +17,10 @@ socketio = SocketIO(app)
 KnowledgeBase = Ontology()
 
 # Connect with ROS
-client = roslibpy.Ros(host='localhost', port=9090)
-client.run()
-
-# ROS topic to control the system
-camera_scan = roslibpy.Topic(client, 'detect_image', 'std_msgs/String')
-robot_move = roslibpy.Topic(client, 'target_pose', 'geometry_msgs/Pose')
-gripper_grasp = roslibpy.Topic(client, 'gripper/grasping', 'std_msgs/String')
-camera_scan.advertise()
-robot_move.advertise()
-gripper_grasp.advertise()
+reasoner = Reasoner()
+camera_scan = reasoner.camera_scan
+robot_move = reasoner.robot_move
+gripper_grasp = reasoner.gripper_grasp
 
 
 @app.route('/')
@@ -116,7 +113,9 @@ def perform_task(msg):
     # Single move/ Later change to call Reasoner to perform tasks
     pos = res[1][1]["Centroid"]
     object = res[1][0]
-    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2), "y": round(pos[1], 2), "z": -0.01}})
+    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2),
+                                              "y": round(pos[1], 2),
+                                              "z": 0.0}})
     robot_move.publish(msg_move)
     msg_grasp = roslibpy.Message({"data": object})
     gripper_grasp.publish(msg_grasp)

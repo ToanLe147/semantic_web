@@ -9,7 +9,6 @@ from camera_3D import Segmentor
 import tf
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import String
-import time
 
 
 Scene_3D = Segmentor()
@@ -41,7 +40,6 @@ class Camera:
                 # print(self.detected)
                 self.scan()
                 self.visual()
-                self.streaming()
                 # for i in list(self.scene.keys()):
                 #     print("{}: {}".format(i, self.scene[i].keys()))
                 # print("==================")
@@ -82,13 +80,6 @@ class Camera:
                     value = self.update_detected_shape(approx, 5)
                     centroid = self.get_center_point(value)
                     self.update_name("Pentagon", value, centroid)
-
-    def streaming(self):
-        # Save frame to image for web UI streaming
-        path = "/home/nico/catkin_ws/src/semantic_web/server/server/static/img/"
-        img_name = path + "streaming.txt"
-        data = cv2.imencode('.jpg', self.img)[1].tostring()
-        open(img_name, 'w+').write(data)
 
     def visual(self):  # for testing
         cv2.imshow("Frame", self.img)

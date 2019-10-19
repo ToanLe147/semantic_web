@@ -5,7 +5,7 @@ import copy
 import rospy
 import numpy as np
 import moveit_commander
-from geometry_msgs.msg import PoseStamped, Pose
+from geometry_msgs.msg import Pose
 from uploader import Ontology
 
 KnowledgeBase = Ontology()
@@ -36,6 +36,20 @@ class Robot:
         self.ur5.go()
         self.backup_pose()
 
+    def target_reaching(self, target):
+        status = False
+        _pose = self.ur5.get_current_pose().pose
+        msg = [target.position.x, target.position.y, target.position.z]
+        KnowledgeBase.update_property("UR5", "Data", msg)
+        if abs(_pose.position.x - target.position.x) <= 0.01:
+            if abs(_pose.position.y - target.position.y) <= 0.01:
+                if abs(_pose.position.z - target.position.z) <= 0.01:
+                    status = True
+        if status:
+            KnowledgeBase.update_property("UR5", "Status", "Reached")
+        else:
+            KnowledgeBase.update_property("UR5", "Status")
+
     def backup_pose(self):
         # Save previous pose
         _pose = self.ur5.get_current_pose().pose
@@ -48,19 +62,6 @@ class Robot:
             current_pose = self.ur5.get_current_pose().pose
             pose = [current_pose.position.x, current_pose.position.y, current_pose.position.z]
             KnowledgeBase.update_property("UR5", "Current_state", pose)
-
-    def add_obstacle(self, name, size, pose):  # Add boxes
-        box_pose = PoseStamped()
-        box_pose.header.frame_id = "base_link"
-        box_pose.pose.position.x = pose[0]
-        box_pose.pose.position.y = pose[1]
-        box_pose.pose.position.z = pose[2]
-        box_pose.pose.orientation.x = pose[3]
-        box_pose.pose.orientation.y = pose[4]
-        box_pose.pose.orientation.z = pose[5]
-        box_pose.pose.orientation.w = pose[6]
-        box_name = name
-        self.scene.add_box(box_name, box_pose, size=tuple(size))
 
     def visual(self, *desired_pose):
         print('========= TARGET POINT ==========')
@@ -92,11 +93,15 @@ class Robot:
         # 3rd move up/down
         poseTarget.position.z = desired_pose.z
 
+        # Update target reaching status
+        self.target_reaching(poseTarget)
+
         # return to previous pose
         if desired_pose.x == desired_pose.y == desired_pose.z == -1:
-            poseTarget.position.x = round(self.previous_pose[0], 2)
-            poseTarget.position.y = round(self.previous_pose[1], 2)
-            poseTarget.position.z = round(self.previous_pose[2], 2)
+            _previous_pose = self.previous_pose
+            poseTarget.position.x = round(_previous_pose[0], 2)
+            poseTarget.position.y = round(_previous_pose[1], 2)
+            poseTarget.position.z = round(_previous_pose[2], 2)
             self.ur5.set_pose_target(poseTarget)
 
             # backup previous_pose
@@ -111,6 +116,9 @@ class Robot:
 
             # Visualization
             self.visual(desired_pose)
+
+            # Update target reaching status
+            self.target_reaching(poseTarget)
             return
 
         waypoint.append(copy.deepcopy(poseTarget))
@@ -126,12 +134,12 @@ class Robot:
                    (poseTarget.position.z - start_point.position.z)**2) < 0.1:
             rospy.loginfo("Warnig: target position overlaps with the initial position!")
 
-        # self.ur5.execute(plan, wait=True)
         self.ur5.set_pose_target(poseTarget)
         if desired_pose.x == desired_pose.y == desired_pose.z == 0:
             self.ur5.set_named_target('home')
 
         moved_status = self.ur5.go(wait=True)
+        # print(moved_status)
         self.ur5.stop()
         # It is always good to clear your targets after planning with poses.
         # Note: there is no equivalent function for clear_joint_value_targets()
@@ -143,18 +151,14 @@ class Robot:
         # Visualization
         self.visual(desired_pose)
 
+        # Update target reaching status
+        self.target_reaching(poseTarget)
+
 
 if __name__ == '__main__':
     try:
         rospy.init_node('ur5_gazebo_robot', anonymous=True)
         ur5 = Robot()
-        # Adding obstacles to Planning Scene
-        raw_input("add Table")
-        ur5.add_obstacle("table", [0.8, 1.4, 1.02], [0, 0.5, -0.54, 0, 0, 0.7071068, 0.7071068])
-        raw_input("add picking base")
-        ur5.add_obstacle("picking_base", [0.3, 1, 1.12], [0.3, -0.6, -0.49, 0, 0, 0.7071068, 0.7071068])
-        raw_input("add box below")
-        ur5.add_obstacle("robot_base", [0.5, 1, 1], [0, -0.175, -0.52, 0, 0, 0.7071068, 0.7071068])
         rospy.spin()
 
     except rospy.ROSInterruptException:
