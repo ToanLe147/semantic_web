@@ -16,16 +16,16 @@ class Gripper:
         self.command = rospy.Subscriber('gripper_grasping', String, self.callback)
         self.gazebo_conditions = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
         self.set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-        self.get_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
+        # self.get_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.attach_srv = rospy.ServiceProxy('/link_attacher_node/attach', Attach)
         self.detach_srv = rospy.ServiceProxy('/link_attacher_node/detach', Attach)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
-        self.unpause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
+        self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.gazebo_conditions.wait_for_service()
         self.attach_srv.wait_for_service()
         self.detach_srv.wait_for_service()
         self.set_state.wait_for_service()
-        self.get_state.wait_for_service()
+        # self.get_state.wait_for_service()
         self.pause.wait_for_service()
         self.unpause.wait_for_service()
         self.gazebo_objects = {}
@@ -84,35 +84,41 @@ class Gripper:
         object_msg.model_name = object
 
         # Implement new pose for object
-        self.pause.call()
-        gripper = self.get_state.call(self.gripper, self.gripper_link)
-        object = self.get_state.call(object, self.common_link)
-        object_msg.pose = object.pose
-        object_msg.twist = object.twist
-        object_msg.pose.position.z = gripper.pose.position.z - 0.03
+        gripper_link_name = self.gripper + "::" + self.gripper_link
+        object_link_name = object + "::" + self.common_link
+        gripper = self.gazebo_objects[gripper_link_name].link_state
+        object_state = self.gazebo_objects[object_link_name].link_state
+        object_msg.pose = object_state.pose
+        object_msg.twist = object_state.twist
+        object_msg.reference_frame = "world"
+        # Vacuum Gripper drags the object close to suction cup
+        object_msg.pose.position.z = gripper.pose.position.z - 0.1
 
-        print(gripper)
+        print(gripper.pose.position.z)
         print("------------SEPERATE-------------")
         print(object_msg)
-        # self.set_state.call(object)
-
-        # Release physic environment
-        self.unpause.call()
+        self.set_state.call(object_msg)
         print("set state")
 
     def pick(self, object):
         self.gazebo_callback(object)
         if self.grasping_condition(object):
+            # Pause physic environment
+            self.pause.call()
+
             req = AttachRequest()
             self.status = True
             req.model_name_1 = self.gripper
             req.link_name_1 = self.gripper_link
             req.model_name_2 = object
             req.link_name_2 = self.common_link
-            self.attach_srv.call(req)
             self.move_object(object)
+            self.attach_srv.call(req)
             self.holding_object = object
             self.update_gripper_info(False)
+
+            # Release physic environment
+            self.unpause.call()
         return self.status
 
     def place(self):

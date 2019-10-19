@@ -93,15 +93,22 @@ def generate_scene(msg):
     instance = msg["instance"]
     property = msg["property"]
     update = msg["update"]
-    data = KnowledgeBase.get_property(instance, property)
-    res = eval(data)
-    data = {}
-    # Later change to call Reasoner.py to generate tasks
-    for shape in res:
-        # print(shape)
-        data["shape"] = shape[0]
-        data["Centroid"] = shape[1]["Centroid"]
-        socketio.emit(update, data, callback="Message Received")
+    if update == "update_scene_tree":
+        data = KnowledgeBase.get_property(instance, property)
+        res = eval(data)
+        data = {}
+        # Later change to call Reasoner.py to generate tasks
+        for shape in res:
+            # print(shape)
+            data["shape"] = shape[0]
+            socketio.emit(update, data, callback="Message Received")
+    else:
+        res = reasoner.generate_task()
+        print(res)
+        for shape in res:
+            data = res[shape]
+            socketio.emit(update, data, callback="Message Received")
+        print
 
 
 @socketio.on('perform_task')
