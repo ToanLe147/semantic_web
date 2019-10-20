@@ -160,6 +160,8 @@ class Reasoner:
         for shape in self.task:
             if self.task[shape]["color"] == "primary":
                 self.add(shape)
+        time.sleep(1)
+        self.Robot_move("home")
 
     def Robot_move(self, position, *modified_z):
         if position == "home":
@@ -192,28 +194,34 @@ class Reasoner:
             print("Add {} {}".format(shape, result["success"]))
             KnowledgeBase.update_property("UR5", "Status")
             self.Robot_move(self.task[shape]["modified_pose"])
-            time.sleep(5)
             robotStatus = KnowledgeBase.get_property("UR5", "Status")
+            while robotStatus != "Reached":
+                time.sleep(0.2)
+                robotStatus = KnowledgeBase.get_property("UR5", "Status")
             print("robot ", robotStatus)
             if robotStatus == "Reached":
                 self.Gripper_grasp(shape)
-                time.sleep(2)
                 gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                while not gripperStatus:
+                    time.sleep(0.2)
+                    gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                 print("gripper ", gripperStatus)
                 if gripperStatus:
                     KnowledgeBase.update_property("UR5", "Status")
                     self.Robot_move(self.task[shape]["centroid"], 1)
-                    time.sleep(5)
                     robotStatus = KnowledgeBase.get_property("UR5", "Status")
+                    while robotStatus != "Reached":
+                        time.sleep(0.2)
+                        robotStatus = KnowledgeBase.get_property("UR5", "Status")
                     print("robot moved ", robotStatus)
                     if robotStatus == "Reached":
                         time.sleep(1)
                         self.Gripper_grasp("0")
-                        time.sleep(2)
                         gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                        while not gripperStatus:
+                            time.sleep(0.2)
+                            gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                         if not gripperStatus:
-                            time.sleep(1)
-                            self.Robot_move("home")
                             print("Finish ADD task")
 
     def remove(self):
