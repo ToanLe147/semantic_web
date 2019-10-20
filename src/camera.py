@@ -9,15 +9,18 @@ from camera_3D import Segmentor
 import tf
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import String
+from uploader import Ontology
 
 
 Scene_3D = Segmentor()
+KnowledgeBase = Ontology()
 
 
 class Camera:
     def __init__(self):
-        self.image_input = rospy.Subscriber("/camera/rgb/image_color", Image,
-        self.callback)
+        self.image_input = rospy.Subscriber("/camera/rgb/image_color",
+                                            Image,
+                                            self.callback)
         self.image_input = rospy.Subscriber("detect_image", String, self.trigger)
         self.bridge = CvBridge()
         self.scene = []
@@ -60,7 +63,8 @@ class Camera:
 
         # Contour detetcion
         _, contour, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
+        if not contour:
+            self.detected = OrderedDict()
         for i in contour:
             area = cv2.contourArea(i)
             approx = cv2.approxPolyDP(i, 0.01 * cv2.arcLength(i, True), True)
@@ -91,19 +95,24 @@ class Camera:
             cv2.destroyAllWindows()
 
     def scan(self):
-        if not self.scene:
-            self.update_trigger = 1
+        if not self.scene and self.detected:
             self.previous_scene.update(self.detected)
             self.scene = self.detected.items()
+            KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
             print("Update Initial Scene")
         elif len(self.previous_scene) < len(self.detected):
             # print("===============")
-            self.update_trigger = 1
             # Update previous scene for next scan
             self.previous_scene = self.detected
             # Update scene for query
             self.scene = self.detected.items()
+            KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
             print("Update New Object Scene")
+        elif not self.detected:
+            self.previous_scene = self.detected
+            self.scene = self.detected.items()
+            KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
+            print("No Object Scene")
         else:
             # print("*****")
             self.update_trigger = 0

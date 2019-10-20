@@ -25,7 +25,7 @@ class Robot:
         self.end_effector = self.ur5.get_end_effector_link()
 
         # Allow replanning to increase the odds of a solution
-        self.ur5.allow_replanning(True)
+        # self.ur5.allow_replanning(True)
 
         # Allow some leeway in position (meters) and orientation (radians)
         self.ur5.set_goal_position_tolerance(0.01)
@@ -115,7 +115,7 @@ class Robot:
             self.update_knowledgeBase(moved_status)
 
             # Visualization
-            self.visual(desired_pose)
+            # self.visual(desired_pose)
 
             # Update target reaching status
             self.target_reaching(poseTarget)
@@ -149,7 +149,7 @@ class Robot:
         self.update_knowledgeBase(moved_status)
 
         # Visualization
-        self.visual(desired_pose)
+        # self.visual(desired_pose)
 
         # Update target reaching status
         self.target_reaching(poseTarget)

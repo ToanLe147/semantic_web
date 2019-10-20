@@ -70,11 +70,11 @@ class Gripper:
             if abs(gripper_link_pose.position.y - object_link_pose.position.y) <= 0.1:
                 if abs(gripper_link_pose.position.x - object_link_pose.position.x) <= 0.1:
                     grasping = True
-        print("===============")
-        print(gripper_link_pose)
-        print("~~~~~", grasping)
-        print(object_link_pose)
-        print("****************")
+        # print("===============")
+        # print(gripper_link_pose)
+        # print("~~~~~", grasping)
+        # print(object_link_pose)
+        # print("****************")
         self.update_gripper_info(grasping)
         return grasping
 
@@ -94,11 +94,11 @@ class Gripper:
         # Vacuum Gripper drags the object close to suction cup
         object_msg.pose.position.z = gripper.pose.position.z - 0.1
 
-        print(gripper.pose.position.z)
-        print("------------SEPERATE-------------")
-        print(object_msg)
+        # print(gripper.pose.position.z)
+        # print("------------SEPERATE-------------")
+        # print(object_msg)
         self.set_state.call(object_msg)
-        print("set state")
+        # print("set state")
 
     def pick(self, object):
         self.gazebo_callback(object)

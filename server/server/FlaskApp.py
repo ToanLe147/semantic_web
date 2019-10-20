@@ -104,7 +104,7 @@ def generate_scene(msg):
             socketio.emit(update, data, callback="Message Received")
     else:
         res = reasoner.generate_task()
-        print(res)
+        # print(res)
         for shape in res:
             data = res[shape]
             socketio.emit(update, data, callback="Message Received")
@@ -113,19 +113,7 @@ def generate_scene(msg):
 
 @socketio.on('perform_task')
 def perform_task(msg):
-    instance = msg["instance"]
-    property = msg["property"]
-    data = KnowledgeBase.get_property(instance, property)
-    res = eval(data)
-    # Single move/ Later change to call Reasoner to perform tasks
-    pos = res[1][1]["Centroid"]
-    object = res[1][0]
-    msg_move = roslibpy.Message({"position": {"x": round(pos[0], 2),
-                                              "y": round(pos[1], 2),
-                                              "z": 0.0}})
-    robot_move.publish(msg_move)
-    msg_grasp = roslibpy.Message({"data": object})
-    gripper_grasp.publish(msg_grasp)
+    reasoner.perform_task()
     print("perform pressed")
 
 

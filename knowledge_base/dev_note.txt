@@ -1,0 +1,32 @@
+2,733520
+0,958506
+2,362690
+0,000344
+1,151901
+-3,110667
+
+rosrun tf static_transform_publisher 1 1 2.5 0 1 0 world cameraBase_link 100
+
+rosrun tf static_transform_publisher 0 0 0 -1.57 0 -1.57 cameraBase_link camera_link 100
+
+### TEST GAZEBO
+-urdf -param robot_description -model ur5 -x 1.5 -y 1.0 -z 1.1 -Y -1.57 -J shoulder_lift_joint -1.5 -J elbow_joint 1.35 -J wrist_1_joint -2.0368 -J wrist_2_joint -1.6225 -unpause
+
+-z 1.0 -y 1.0 -x 1.15 -Y -1.57
+
+rosrun pysdf sdf2urdf.py model.sdf kinect.urdf
+
+rosrun xacro xacro ur5_joint_limited_robot.urdf.xacro > ur5.urdf
+
+############# SERVER #################
+
+LoadModule wsgi_module "/home/nico/.local/lib/python2.7/site-packages/mod_wsgi/server/mod_wsgi-py27.so"
+WSGIPythonHome "/usr"
+
+Original: LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so
+
+uwsgi --http 192.168.100.16:5000 --wsgi-file FlaskApp.py --callable app --processes 4 --threads 2 --stats 192.168.100.16:9191
+
+############# DEAL WITH REASONER ###################
+a = "[('Triangle', {'Boundary': [[261, 291], [281, 325], [303, 291]], 'Centroid': [-0.10290370792744503, 0.3176392093596609, -0.02486046291064503]}), ('Pentagon', {'Boundary': [[405, 234], [432, 251], [455, 232], [444, 205], [414, 205]], 'Centroid': [0.2989835160442187, 0.5252980373522871, -0.02500951817606456]}), ('Rectangle', {'Boundary': [[289, 140], [288, 186], [336, 186], [336, 140]], 'Centroid': [-0.021411022643329423, 0.7003451297211731, -0.024610166171896264]})]"
+

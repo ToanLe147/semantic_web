@@ -4,9 +4,9 @@
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="sim" default="true" />
   <arg name="debug" default="false" />
-  <arg name="rviz" default="true" />
+  <arg name="rviz" default="false" />
   <!-- true:hsv world, false: detection world -->
-  <arg name="hsv_world" default="false" />
+  <arg name="hsv_world" default="true" />
   <arg name="scene_file" default="$(find semantic_web)/simulation/obstacles_planning_scene.scene"/>
 
   <!-- ************* startup simulated world ************* -->

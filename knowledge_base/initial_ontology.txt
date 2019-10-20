@@ -1,0 +1,100 @@
+@prefix :      <http://www.semanticweb.org/nico/ontologies/2019/8/Kbase> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix kbase: <http://www.semanticweb.org/nico/ontologies/2019/8/Kbase#> .
+
+kbase:Sensor  a  owl:Class .
+
+kbase:Move  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Object  a  owl:Class .
+
+kbase:Task  a   owl:Class .
+
+kbase:Status  a  owl:DatatypeProperty .
+
+kbase:left_of  a     owl:ObjectProperty ;
+        rdfs:domain  kbase:Object ;
+        rdfs:range   kbase:Object .
+
+kbase:has  a         owl:ObjectProperty ;
+        rdfs:domain  kbase:Sensor , kbase:Object , kbase:Gripper , kbase:Robot .
+
+kbase:Gripper  a  owl:Class .
+
+:       a       owl:Ontology .
+
+kbase:Position  a  owl:DatatypeProperty .
+
+kbase:requires  a    owl:ObjectProperty ;
+        rdfs:domain  kbase:Sensor , kbase:Object , kbase:Task , kbase:Gripper , kbase:Robot .
+
+kbase:Place  a               kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Pick  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Robot  a  owl:Class .
+
+kbase:Current_state  a  owl:DatatypeProperty .
+
+kbase:UR5  a                 owl:NamedIndividual , kbase:Robot ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Move .
+
+kbase:Vacuum_gripper  a      owl:NamedIndividual , kbase:Gripper ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Place , kbase:Pick .
+
+kbase:Scan  a                kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" .
+
+kbase:Kinect  a              kbase:Sensor , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:has            kbase:Scan .
+
+kbase:Data  a   owl:DatatypeProperty .
+
+kbase:DemonstrationLearning_Task
+        a                    kbase:Task , owl:NamedIndividual ;
+        kbase:Current_state  "" ;
+        kbase:Data           "" ;
+        kbase:Initial_state  "" ;
+        kbase:Position       "" ;
+        kbase:Status         "" ;
+        kbase:requires       kbase:UR5 , kbase:Vacuum_gripper , kbase:Kinect .
+
+kbase:Initial_state  a  owl:DatatypeProperty .
+

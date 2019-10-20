@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 
 import rospy
-from gazebo_msgs.srv import SpawnModel, SpawnModelRequest
+from gazebo_msgs.srv import SpawnModel, SpawnModelRequest, DeleteModel
 from tf.transformations import quaternion_from_euler
 import os
+# import rospkg
+
+# rospack = rospkg.RosPack()
 
 
 class assembly_objects:
     def __init__(self):
         self.spawn_srv = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
-        self.dir_path = os.path.abspath("src/semantic_web/simulation/assembly_samples")
+        self.delete_srv = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
+        # self.dir_path = rospack.get_path('semantic_web') + "/simulation/assembly_samples"
+        self.dir_path = "/home/nico/catkin_ws/src/semantic_web/simulation/assembly_samples"
         self.shape = ["Triangle", "Rectangle", "Pentagon"]
         # print()
         self.spawn_srv.wait_for_service()
+        self.delete_srv.wait_for_service()
 
     def check_name(self, name):
         if name in self.shape:
@@ -64,17 +70,17 @@ class assembly_objects:
 
             if shape == "Pentagon":
                 px = 0.9
-                py = 0.5
+                py = 1.0
                 pz = 1.15
 
             if shape == "Triangle":
                 px = 0.9
-                py = 0.7
+                py = 0.4
                 pz = 1.15
 
             if shape == "Rectangle":
                 px = 0.9
-                py = 0.9
+                py = 0.7
                 pz = 1.15
 
             req.model_name = name
@@ -89,7 +95,8 @@ class assembly_objects:
             req.initial_pose.orientation.z = q[2]
             req.initial_pose.orientation.w = q[3]
 
-            self.spawn_srv.call(req)
+            result = self.spawn_srv.call(req)
+            return result
 
 
 if __name__ == '__main__':
