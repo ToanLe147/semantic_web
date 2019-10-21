@@ -4,17 +4,17 @@ import rospy
 from gazebo_msgs.srv import SpawnModel, SpawnModelRequest, DeleteModel
 from tf.transformations import quaternion_from_euler
 import os
-# import rospkg
+import rospkg
 
-# rospack = rospkg.RosPack()
+rospack = rospkg.RosPack()
 
 
 class assembly_objects:
     def __init__(self):
         self.spawn_srv = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
         self.delete_srv = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
-        # self.dir_path = rospack.get_path('semantic_web') + "/simulation/assembly_samples"
-        self.dir_path = "/home/nico/catkin_ws/src/semantic_web/simulation/assembly_samples"
+        self.dir_path = rospack.get_path('semantic_web') + "/simulation/assembly_samples"
+        # self.dir_path = "/home/nico/catkin_ws/src/semantic_web/simulation/assembly_samples"
         self.shape = ["Triangle", "Rectangle", "Pentagon"]
         # print()
         self.spawn_srv.wait_for_service()

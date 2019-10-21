@@ -11,11 +11,28 @@ KnowledgeBase = Ontology()
 rospack = rospkg.RosPack()
 
 
-class Reasoner:
+class GazeboSyncing:
     def __init__(self):
+        print("***")
+
+    def check_name(self, shape):
+        # Sync with Gazebo environement
+        gazebo_list = eval(KnowledgeBase.get_property("Kinect", "Data"))
+        Gazebo_index = -1
+        while shape in gazebo_list:
+            # Update name of new gazebo object
+            Gazebo_index = Gazebo_index + 1
+            Gazebo_orgi = shape
+            if "#" in shape:
+                Gazebo_orgi, _ = shape.split("#")
+            shape = Gazebo_orgi + "#" + str(Gazebo_index)
+        return shape
+
+
+class Reasoner:
+    def __init__(self, client):
         # Connect with ROS
-        self.client = roslibpy.Ros(host='localhost', port=9090)
-        self.client.run()
+        self.client = client
 
         # ROS topic to control the system
         self.camera_scan = roslibpy.Topic(self.client, 'detect_image',
@@ -24,9 +41,12 @@ class Reasoner:
                                                       'geometry_msgs/Pose')
         self.gripper_grasp = roslibpy.Topic(self.client, 'gripper_grasping',
                                                          'std_msgs/String')
+        self.update_planning = roslibpy.Topic(self.client, 'add_box_ur5',
+                                                           'std_msgs/String')
         self.camera_scan.advertise()
         self.robot_move.advertise()
         self.gripper_grasp.advertise()
+        self.update_planning.advertise()
 
         # ROS services to control Gazebo environemnt
         self.dir_path = rospack.get_path('semantic_web') + "/simulation/assembly_samples"
@@ -40,8 +60,14 @@ class Reasoner:
 
         # Temporary data
         self.task = OrderedDict()
+        self.gazebo_object_names = eval(KnowledgeBase.get_property("Kinect", "Data"))
+
+        # Control Gazebo spawn/delete models
+        self.gazebo = GazeboSyncing()
 
     def check_name(self, name):
+        if "#" in name:
+            name, _ = name.split("#")
         if name in self.shape:
             # print(name)
             return name
@@ -93,6 +119,8 @@ class Reasoner:
 
             request = roslibpy.ServiceRequest(req)
             result = self.spawn_srv.call(request)
+            self.gazebo_object_names.append(name)
+            KnowledgeBase.update_property("Kinect", "Data", str(self.gazebo_object_names))
             return result
 
     def picking_base(self, shape):
@@ -100,11 +128,11 @@ class Reasoner:
         if "_" in shape:
             shape, _ = shape.split("_")
         if shape == "Triangle":
-            pickup_place = [0.6, -0.6, 0.15]
+            pickup_place = [0.6, -0.6, 0.18]
         if shape == "Rectangle":
-            pickup_place = [0.3, -0.6, 0.15]
+            pickup_place = [0.3, -0.6, 0.18]
         if shape == "Pentagon":
-            pickup_place = [0.0, -0.6, 0.15]
+            pickup_place = [0.0, -0.6, 0.18]
         return pickup_place
 
     def check_position(self, list1, list2, threshold):
@@ -130,7 +158,7 @@ class Reasoner:
                 if shape in target.keys():
                     # Check position of shape
                     if self.check_position(scene[shape]["Centroid"],
-                                           target[shape]["Centroid"], 0.02):
+                                           target[shape]["Centroid"], 0.035):
                         self.task[shape] = {"task": "Available {}".format(shape),
                                             "color": "success",
                                             "centroid": target[shape]["Centroid"]}
@@ -147,10 +175,12 @@ class Reasoner:
                                         "modified_pose": scene[shape]["Centroid"]}
 
         for shape in target.keys():
-            self.task[shape] = {"task": "Add {}".format(shape),
-                                "color": "primary",
-                                "modified_pose": self.picking_base(shape),
-                                "centroid": target[shape]["Centroid"]}
+            shapeG = self.gazebo.check_name(shape)
+            # Update ADD Task
+            self.task[shapeG] = {"task": "Add {}".format(shapeG),
+                                 "color": "primary",
+                                 "modified_pose": self.picking_base(shape),
+                                 "centroid": target[shape]["Centroid"]}
 
         # Update Ontology
         KnowledgeBase.update_property(task, "Status", str(self.task))
@@ -168,11 +198,11 @@ class Reasoner:
             position = [0, 0, 0]
         if position == "go back":
             position = [-1, -1, -1]
-        msg_move = {"position": {"x": round(position[0], 2),
-                                 "y": round(position[1], 2),
-                                 "z": round(position[2], 2)}}
+        msg_move = {"position": {"x": position[0],
+                                 "y": position[1],
+                                 "z": position[2]}}
         if len(modified_z) != 0:
-            msg_move["position"]["z"] = round(position[2], 2) + 0.1
+            msg_move["position"]["z"] = position[2] + 0.07
         self.robot_move.publish(msg_move)
 
     def Gripper_grasp(self, command):
@@ -189,40 +219,46 @@ class Reasoner:
 
     def add(self, shape):
         result = self.creat_gazebo_model(shape)
-        time.sleep(1.5)
+        time.sleep(1)
+        KnowledgeBase.update_property("UR5", "Status")
         if result["success"]:
-            print("Add {} {}".format(shape, result["success"]))
-            KnowledgeBase.update_property("UR5", "Status")
+            print("Add {} in Gazebo: {}".format(shape, result["success"]))
             self.Robot_move(self.task[shape]["modified_pose"])
             robotStatus = KnowledgeBase.get_property("UR5", "Status")
             while robotStatus != "Reached":
-                time.sleep(0.2)
+                time.sleep(1)
                 robotStatus = KnowledgeBase.get_property("UR5", "Status")
             print("robot ", robotStatus)
+            self.update_planning.publish({"data": "1"})
+            time.sleep(2)
             if robotStatus == "Reached":
+                KnowledgeBase.update_property("UR5", "Status")
                 self.Gripper_grasp(shape)
                 gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                 while not gripperStatus:
-                    time.sleep(0.2)
+                    time.sleep(1)
                     gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                 print("gripper ", gripperStatus)
+                time.sleep(2)
                 if gripperStatus:
-                    KnowledgeBase.update_property("UR5", "Status")
                     self.Robot_move(self.task[shape]["centroid"], 1)
                     robotStatus = KnowledgeBase.get_property("UR5", "Status")
                     while robotStatus != "Reached":
-                        time.sleep(0.2)
+                        time.sleep(1)
                         robotStatus = KnowledgeBase.get_property("UR5", "Status")
                     print("robot moved ", robotStatus)
+                    time.sleep(2)
                     if robotStatus == "Reached":
-                        time.sleep(1)
                         self.Gripper_grasp("0")
                         gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                         while not gripperStatus:
-                            time.sleep(0.2)
+                            time.sleep(1)
                             gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                        print("gripper holded", gripperStatus)
+                        time.sleep(2)
                         if not gripperStatus:
-                            print("Finish ADD task")
+                            print("Finish ADD {}".format(shape))
+                            self.update_planning.publish({"data": "0"})
 
     def remove(self):
         print

@@ -6,6 +6,7 @@ from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState, GetModelState, GetLinkState
 from std_srvs.srv import Empty
 from uploader import Ontology
+import time
 
 KnowledgeBase = Ontology()
 
@@ -41,13 +42,15 @@ class Gripper:
     def update_gripper_info(self, *grasping):
         if len(grasping) != 0:
             KnowledgeBase.update_property("Vacuum_gripper", "Current_state", grasping[0])
-        KnowledgeBase.update_property("Vacuum_gripper", "Status", self.status)
         if self.status:
             KnowledgeBase.update_property("Vacuum_gripper", "Data", self.holding_object)
+            KnowledgeBase.update_property("Vacuum_gripper", "Status", self.status)
         else:
             KnowledgeBase.update_property("Vacuum_gripper", "Data")
+            KnowledgeBase.update_property("Vacuum_gripper", "Status", self.status)
 
     def gazebo_callback(self, object):
+        self.gazebo_objects = {}
         gripper_link_name = self.gripper + "::" + self.gripper_link
         object_link_name = object + "::" + self.common_link
         gripper_pose = self.gazebo_conditions.call(gripper_link_name, "world")
@@ -70,11 +73,13 @@ class Gripper:
             if abs(gripper_link_pose.position.y - object_link_pose.position.y) <= 0.1:
                 if abs(gripper_link_pose.position.x - object_link_pose.position.x) <= 0.1:
                     grasping = True
-        # print("===============")
-        # print(gripper_link_pose)
-        # print("~~~~~", grasping)
-        # print(object_link_pose)
-        # print("****************")
+        print("===============")
+        print(gripper_link_pose)
+        print("~~~~~", grasping)
+        print(object_link_pose)
+        print("****************")
+        print(self.status)
+        print("****************")
         self.update_gripper_info(grasping)
         return grasping
 
@@ -92,44 +97,49 @@ class Gripper:
         object_msg.twist = object_state.twist
         object_msg.reference_frame = "world"
         # Vacuum Gripper drags the object close to suction cup
+        # object_msg.pose.position.x = gripper.pose.position.x
+        # object_msg.pose.position.y = gripper.pose.position.y
         object_msg.pose.position.z = gripper.pose.position.z - 0.1
 
         # print(gripper.pose.position.z)
         # print("------------SEPERATE-------------")
         # print(object_msg)
         self.set_state.call(object_msg)
-        # print("set state")
+        print("set state")
 
     def pick(self, object):
         self.gazebo_callback(object)
         if self.grasping_condition(object):
             # Pause physic environment
             self.pause.call()
-
+            self.move_object(object)
+            time.sleep(1)
+            # Attach
             req = AttachRequest()
-            self.status = True
             req.model_name_1 = self.gripper
             req.link_name_1 = self.gripper_link
             req.model_name_2 = object
             req.link_name_2 = self.common_link
-            self.move_object(object)
             self.attach_srv.call(req)
+            time.sleep(1)
             self.holding_object = object
-            self.update_gripper_info(False)
-
+            self.status = True
             # Release physic environment
             self.unpause.call()
+            time.sleep(1)
+            self.update_gripper_info(False)
         return self.status
 
     def place(self):
         req = AttachRequest()
-        self.status = False
         req.model_name_1 = self.gripper
         req.link_name_1 = self.gripper_link
         req.model_name_2 = self.holding_object
         req.link_name_2 = self.common_link
         self.detach_srv.call(req)
+        time.sleep(2)
         self.holding_object = ""
+        self.status = False
         self.update_gripper_info(False)
         return self.status
 

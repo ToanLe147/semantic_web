@@ -145,6 +145,11 @@
         color = dataDict["color"]
         $("#task_tree").append('<li class="mb-3 list-group-item list-group-item-' + color + '" value="' + task + '">' + task + '</li>')
     })
+    // Activate Perform btn
+    socket.on("activate_perform_btn", function(dataDict){
+        task = dataDict["active"]
+        $("#task_tree").append('<li class="mb-3 list-group-item list-group-item-' + color + '" value="' + task + '">' + task + '</li>')
+    })
 
     // Click on SHOW scene btn
     $("button#btn_get_scene").click(function(){

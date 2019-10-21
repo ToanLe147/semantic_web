@@ -17,7 +17,9 @@ socketio = SocketIO(app)
 KnowledgeBase = Ontology()
 
 # Connect with ROS
-reasoner = Reasoner()
+client = roslibpy.Ros(host='localhost', port=9090)
+client.run()
+reasoner = Reasoner(client)
 camera_scan = reasoner.camera_scan
 robot_move = reasoner.robot_move
 gripper_grasp = reasoner.gripper_grasp

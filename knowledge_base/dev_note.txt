@@ -30,3 +30,6 @@ uwsgi --http 192.168.100.16:5000 --wsgi-file FlaskApp.py --callable app --proces
 ############# DEAL WITH REASONER ###################
 a = "[('Triangle', {'Boundary': [[261, 291], [281, 325], [303, 291]], 'Centroid': [-0.10290370792744503, 0.3176392093596609, -0.02486046291064503]}), ('Pentagon', {'Boundary': [[405, 234], [432, 251], [455, 232], [444, 205], [414, 205]], 'Centroid': [0.2989835160442187, 0.5252980373522871, -0.02500951817606456]}), ('Rectangle', {'Boundary': [[289, 140], [288, 186], [336, 186], [336, 140]], 'Centroid': [-0.021411022643329423, 0.7003451297211731, -0.024610166171896264]})]"
 
+########### PATH PLANNER #######################
+Change path planner in ompl_planning.yaml -> change value of "default_planner_config"
+

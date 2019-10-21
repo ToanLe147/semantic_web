@@ -5,8 +5,11 @@ import copy
 import rospy
 import numpy as np
 import moveit_commander
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, PoseStamped
+from std_msgs.msg import String
 from uploader import Ontology
+from tf.transformations import quaternion_from_euler
+import time
 
 KnowledgeBase = Ontology()
 
@@ -16,6 +19,7 @@ class Robot:
         # Initial setup for UR5
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.Subscriber('target_pose', Pose, self.move)
+        rospy.Subscriber('add_box_ur5', String, self.add_object)
         self.robot = moveit_commander.RobotCommander()
 
         self.scene = moveit_commander.PlanningSceneInterface()
@@ -49,6 +53,31 @@ class Robot:
             KnowledgeBase.update_property("UR5", "Status", "Reached")
         else:
             KnowledgeBase.update_property("UR5", "Status")
+
+    def add_object(self, msg):
+        time.sleep(1)
+        box_pose = PoseStamped()
+        box_pose.header.frame_id = "wrist_3_link"
+        box_pose.pose.position.x = 0.0
+        box_pose.pose.position.y = 0.1
+        box_pose.pose.position.z = 0.0
+        q = quaternion_from_euler(1.570796327, 0, 0)
+        box_pose.pose.orientation.x = q[0]
+        box_pose.pose.orientation.y = q[1]
+        box_pose.pose.orientation.z = q[2]
+        box_pose.pose.orientation.w = q[3]
+        box_name = "box"
+        if msg.data != "0":
+            self.scene.add_box(box_name, box_pose, size=(0.16, 0.16, 0.02))
+            time.sleep(1)
+            # Attach
+            grasping_group = 'manipulator'
+            touch_links = self.robot.get_link_names(group=grasping_group)
+            self.scene.attach_box("wrist_3_link", box_name, touch_links=touch_links)
+        else:
+            self.scene.remove_attached_object("wrist_3_link", name=box_name)
+            time.sleep(1)
+            self.scene.remove_world_object(box_name)
 
     def backup_pose(self):
         # Save previous pose

@@ -28,7 +28,8 @@ class Camera:
         self.previous_scene = OrderedDict()
         self.detected = OrderedDict()
         self.update_trigger = 0
-        self.image_trigger = 0  # Added for testing
+        self.image_trigger = 0
+        KnowledgeBase.update_property("Kinect", "Data", "[]")
 
     def trigger(self, msg):
         self.image_trigger = int(msg.data)
@@ -63,11 +64,10 @@ class Camera:
 
         # Contour detetcion
         _, contour, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        if not contour:
-            self.detected = OrderedDict()
+        self.detected = OrderedDict()
         for i in contour:
             area = cv2.contourArea(i)
-            approx = cv2.approxPolyDP(i, 0.01 * cv2.arcLength(i, True), True)
+            approx = cv2.approxPolyDP(i, 0.03 * cv2.arcLength(i, True), True)
             # print(len(approx))
             # print("===")
             if area > 400:
@@ -96,26 +96,21 @@ class Camera:
 
     def scan(self):
         if not self.scene and self.detected:
-            self.previous_scene.update(self.detected)
             self.scene = self.detected.items()
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
             print("Update Initial Scene")
-        elif len(self.previous_scene) < len(self.detected):
-            # print("===============")
-            # Update previous scene for next scan
-            self.previous_scene = self.detected
-            # Update scene for query
+        elif self.detected:
             self.scene = self.detected.items()
+            print(self.scene)
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
-            print("Update New Object Scene")
+            print("Update Object Scene")
         elif not self.detected:
-            self.previous_scene = self.detected
+            # self.previous_scene = self.detected
             self.scene = self.detected.items()
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
             print("No Object Scene")
         else:
-            # print("*****")
-            self.update_trigger = 0
+            print("*****")
 
     def update_name(self, name, value, centroid):
         index = -1  # add index number Zero to sync with Gazebo experiment
