@@ -30,16 +30,29 @@
     <section class="resume-section mw-100 p-lg-5 align-items-center" id="main">
         <div class="d-flex">
             <div class="mr-5">
-                <h2>LEARNING</h2>
-                <div class="mb-5">
-                    <!-- MYPOSITION -->
-                    <h3 id="learning_trigger_status">...</h3>
-
-                    <button id="btn_learn" class="learn btn btn-info
-                    font-weight-bold" type="button" value="learn">Learn</button>
-                    <button id="btn_finish_learn" class="learn btn btn-danger
-                    font-weight-bold" type="button" value="finish_learn">Done</button>
-
+                <div class="d-flex mb-5">
+                    <div class="mr-5">
+                        <h2>OBSERVING</h2>
+                        <div class="mr-5">
+                            <!-- MYPOSITION -->
+                            <h3 id="observe_trigger_status">...</h3>
+                            <button id="btn_observe" class="observe btn btn-info
+                            font-weight-bold" type="button" value="observe">Observe</button>
+                            <button id="btn_finish_observe" class="observe btn btn-danger
+                            font-weight-bold" type="button" value="finish_observe">Done</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>LEARNING</h2>
+                        <div class="mr-5">
+                            <!-- MYPOSITION -->
+                            <h3 id="learning_trigger_status">...</h3>
+                            <button id="btn_learn" class="learn btn btn-info
+                            font-weight-bold" type="button" value="learn">Learn</button>
+                            <button id="btn_finish_learn" class="learn btn btn-danger
+                            font-weight-bold" type="button" value="finish_learn">Done</button>
+                        </div>
+                    </div>
                 </div>
                 <h2>INSTRUCTION SCENE</h2>
                 <img id="picking_frame" src="{{ url_for('static', filename='img/target.png') }}">

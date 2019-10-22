@@ -26,13 +26,7 @@ gripper = Gripper()
 
 if __name__ == '__main__':
     try:
-
-        # Update perception data
-        # while not rospy.is_shutdown():
-        # if kinect.update_trigger == 1:
-            # perception.update_property("DemonstrationLearning_Task", "Current_state", kinect.scene)
-
-        # Keep rospy running
+        
         rospy.spin()
 
     except rospy.ROSInterruptException:

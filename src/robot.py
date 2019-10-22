@@ -29,7 +29,7 @@ class Robot:
         self.end_effector = self.ur5.get_end_effector_link()
 
         # Allow replanning to increase the odds of a solution
-        # self.ur5.allow_replanning(True)
+        self.ur5.allow_replanning(True)
 
         # Allow some leeway in position (meters) and orientation (radians)
         self.ur5.set_goal_position_tolerance(0.01)
@@ -37,7 +37,7 @@ class Robot:
 
         # Guild UR5 go to ready position
         self.ur5.set_named_target('home')
-        self.ur5.go()
+        self.ur5.go(wait=True)
         self.backup_pose()
 
     def target_reaching(self, target):
@@ -67,14 +67,14 @@ class Robot:
         box_pose.pose.orientation.z = q[2]
         box_pose.pose.orientation.w = q[3]
         box_name = "box"
-        if msg.data != "0":
+        if msg.data == "1":
             self.scene.add_box(box_name, box_pose, size=(0.16, 0.16, 0.02))
             time.sleep(1)
             # Attach
             grasping_group = 'manipulator'
             touch_links = self.robot.get_link_names(group=grasping_group)
             self.scene.attach_box("wrist_3_link", box_name, touch_links=touch_links)
-        else:
+        if msg.data == "0":
             self.scene.remove_attached_object("wrist_3_link", name=box_name)
             time.sleep(1)
             self.scene.remove_world_object(box_name)
@@ -106,6 +106,10 @@ class Robot:
         print('=============')
 
     def move(self, msg):
+        # Go up
+        self.ur5.set_named_target('up')
+        self.ur5.go(wait=True)
+
         # Handle recieved message
         desired_pose = msg.position
         waypoint = []

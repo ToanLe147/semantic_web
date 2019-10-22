@@ -98,16 +98,19 @@ class Camera:
         if not self.scene and self.detected:
             self.scene = self.detected.items()
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
+            print("*****")
             print("Update Initial Scene")
         elif self.detected:
             self.scene = self.detected.items()
-            print(self.scene)
+            # print(self.scene)
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
+            print("*****")
             print("Update Object Scene")
         elif not self.detected:
             # self.previous_scene = self.detected
             self.scene = self.detected.items()
             KnowledgeBase.update_property("Kinect", "Current_state", self.scene)
+            print("*****")
             print("No Object Scene")
         else:
             print("*****")

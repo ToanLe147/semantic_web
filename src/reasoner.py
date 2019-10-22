@@ -13,7 +13,7 @@ rospack = rospkg.RosPack()
 
 class GazeboSyncing:
     def __init__(self):
-        print("***")
+        print("-*-")
 
     def check_name(self, shape):
         # Sync with Gazebo environement
@@ -60,7 +60,10 @@ class Reasoner:
 
         # Temporary data
         self.task = OrderedDict()
-        self.gazebo_object_names = eval(KnowledgeBase.get_property("Kinect", "Data"))
+        if KnowledgeBase.get_property("Kinect", "Data") != "":
+            initial_gazebo_names = eval(KnowledgeBase.get_property("Kinect",
+                                                                   "Data"))
+            self.gazebo_object_names = initial_gazebo_names
 
         # Control Gazebo spawn/delete models
         self.gazebo = GazeboSyncing()
@@ -80,6 +83,7 @@ class Reasoner:
             return False
 
     def creat_gazebo_model(self, name):
+        # Add gazebo model
         req = {"initial_pose": {"position": {}, "orientation": {}}}
         rr = rp = ry = 0
         shape = self.check_name(name)
@@ -88,7 +92,6 @@ class Reasoner:
             self.path = os.path.join(self.dir_path, shape + "/model.sdf")
             path = open(self.path, "r")
             file = path.read()
-            # print(file)
 
             if shape == "Pentagon":
                 px = 0.9
@@ -158,7 +161,7 @@ class Reasoner:
                 if shape in target.keys():
                     # Check position of shape
                     if self.check_position(scene[shape]["Centroid"],
-                                           target[shape]["Centroid"], 0.035):
+                                           target[shape]["Centroid"], 0.03):
                         self.task[shape] = {"task": "Available {}".format(shape),
                                             "color": "success",
                                             "centroid": target[shape]["Centroid"]}
@@ -177,7 +180,7 @@ class Reasoner:
         for shape in target.keys():
             shapeG = self.gazebo.check_name(shape)
             # Update ADD Task
-            self.task[shapeG] = {"task": "Add {}".format(shapeG),
+            self.task[shapeG] = {"task": "Add {}".format(shape),
                                  "color": "primary",
                                  "modified_pose": self.picking_base(shape),
                                  "centroid": target[shape]["Centroid"]}
@@ -190,6 +193,10 @@ class Reasoner:
         for shape in self.task:
             if self.task[shape]["color"] == "primary":
                 self.add(shape)
+            if self.task[shape]["color"] == "danger":
+                self.remove(shape)
+            if self.task[shape]["color"] == "warning":
+                self.modify(shape)
         time.sleep(1)
         self.Robot_move("home")
 
@@ -202,12 +209,12 @@ class Reasoner:
                                  "y": position[1],
                                  "z": position[2]}}
         if len(modified_z) != 0:
-            msg_move["position"]["z"] = position[2] + 0.07
+            msg_move["position"]["z"] = position[2] + 0.05
         self.robot_move.publish(msg_move)
 
     def Gripper_grasp(self, command):
-        # "command" parameter is a string of object name to pick object or Zero
-        # to place object
+        # "command" parameter is a string of object name for picking object or
+        # Zero for releasing object
         msg_grasp = {"data": command}
         self.gripper_grasp.publish(msg_grasp)
         print
@@ -251,17 +258,90 @@ class Reasoner:
                     if robotStatus == "Reached":
                         self.Gripper_grasp("0")
                         gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
-                        while not gripperStatus:
+                        while gripperStatus:
                             time.sleep(1)
                             gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
                         print("gripper holded", gripperStatus)
+                        self.update_planning.publish({"data": "0"})
                         time.sleep(2)
                         if not gripperStatus:
                             print("Finish ADD {}".format(shape))
-                            self.update_planning.publish({"data": "0"})
 
-    def remove(self):
-        print
+    def remove(self, shape):
+        KnowledgeBase.update_property("UR5", "Status")
+        self.Robot_move(self.task[shape]["modified_pose"], 1)
+        robotStatus = KnowledgeBase.get_property("UR5", "Status")
+        while robotStatus != "Reached":
+            time.sleep(1)
+            robotStatus = KnowledgeBase.get_property("UR5", "Status")
+        print("robot ", robotStatus)
+        self.update_planning.publish({"data": "1"})
+        time.sleep(2)
+        if robotStatus == "Reached":
+            KnowledgeBase.update_property("UR5", "Status")
+            self.Gripper_grasp(shape)
+            gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+            while not gripperStatus:
+                time.sleep(1)
+                gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+            print("gripper ", gripperStatus)
+            time.sleep(2)
+            if gripperStatus:
+                self.Robot_move([-0.5, -0.2, 0.3])
+                robotStatus = KnowledgeBase.get_property("UR5", "Status")
+                while robotStatus != "Reached":
+                    time.sleep(1)
+                    robotStatus = KnowledgeBase.get_property("UR5", "Status")
+                print("robot moved ", robotStatus)
+                time.sleep(2)
+                if robotStatus == "Reached":
+                    self.Gripper_grasp("0")
+                    gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                    while gripperStatus:
+                        time.sleep(1)
+                        gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                    print("gripper holded", gripperStatus)
+                    self.update_planning.publish({"data": "0"})
+                    time.sleep(2)
+                    if not gripperStatus:
+                        req = roslibpy.ServiceRequest({"model_name": str(shape)})
+                        removeStatus = self.delete_srv.call(req)["success"]
+                        print("Finish REMOVE {}: {}".format(shape, removeStatus))
 
-    def modify(self):
-        print
+    def modify(self, shape):
+        self.Robot_move(self.task[shape]["modified_pose"], 1)
+        robotStatus = KnowledgeBase.get_property("UR5", "Status")
+        while robotStatus != "Reached":
+            time.sleep(1)
+            robotStatus = KnowledgeBase.get_property("UR5", "Status")
+        print("robot ", robotStatus)
+        self.update_planning.publish({"data": "1"})
+        time.sleep(2)
+        if robotStatus == "Reached":
+            KnowledgeBase.update_property("UR5", "Status")
+            self.Gripper_grasp(shape)
+            gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+            while not gripperStatus:
+                time.sleep(1)
+                gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+            print("gripper ", gripperStatus)
+            time.sleep(2)
+            if gripperStatus:
+                self.Robot_move(self.task[shape]["centroid"], 1)
+                robotStatus = KnowledgeBase.get_property("UR5", "Status")
+                while robotStatus != "Reached":
+                    time.sleep(1)
+                    robotStatus = KnowledgeBase.get_property("UR5", "Status")
+                print("robot moved ", robotStatus)
+                time.sleep(2)
+                if robotStatus == "Reached":
+                    self.Gripper_grasp("0")
+                    gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                    while gripperStatus:
+                        time.sleep(1)
+                        gripperStatus = eval(KnowledgeBase.get_property("Vacuum_gripper", "Status"))
+                    print("gripper holded", gripperStatus)
+                    self.update_planning.publish({"data": "0"})
+                    time.sleep(2)
+                    if not gripperStatus:
+                        print("Finish MODIFY {}".format(shape))

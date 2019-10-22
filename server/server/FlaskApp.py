@@ -19,6 +19,7 @@ KnowledgeBase = Ontology()
 # Connect with ROS
 client = roslibpy.Ros(host='localhost', port=9090)
 client.run()
+
 reasoner = Reasoner(client)
 camera_scan = reasoner.camera_scan
 robot_move = reasoner.robot_move

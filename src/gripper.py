@@ -3,7 +3,7 @@ import rospy
 from gazebo_ros_link_attacher.srv import Attach, AttachRequest
 from std_msgs.msg import String
 from gazebo_msgs.msg import ModelState
-from gazebo_msgs.srv import SetModelState, GetModelState, GetLinkState
+from gazebo_msgs.srv import SetModelState, GetLinkState
 from std_srvs.srv import Empty
 from uploader import Ontology
 import time
@@ -17,7 +17,6 @@ class Gripper:
         self.command = rospy.Subscriber('gripper_grasping', String, self.callback)
         self.gazebo_conditions = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
         self.set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-        # self.get_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.attach_srv = rospy.ServiceProxy('/link_attacher_node/attach', Attach)
         self.detach_srv = rospy.ServiceProxy('/link_attacher_node/detach', Attach)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -26,7 +25,6 @@ class Gripper:
         self.attach_srv.wait_for_service()
         self.detach_srv.wait_for_service()
         self.set_state.wait_for_service()
-        # self.get_state.wait_for_service()
         self.pause.wait_for_service()
         self.unpause.wait_for_service()
         self.gazebo_objects = {}
@@ -78,8 +76,8 @@ class Gripper:
         print("~~~~~", grasping)
         print(object_link_pose)
         print("****************")
-        print(self.status)
-        print("****************")
+        # print(self.status)
+        # print("****************")
         self.update_gripper_info(grasping)
         return grasping
 
@@ -105,7 +103,7 @@ class Gripper:
         # print("------------SEPERATE-------------")
         # print(object_msg)
         self.set_state.call(object_msg)
-        print("set state")
+        # print("set state")
 
     def pick(self, object):
         self.gazebo_callback(object)
@@ -128,6 +126,7 @@ class Gripper:
             self.unpause.call()
             time.sleep(1)
             self.update_gripper_info(False)
+            print("Picked Object")
         return self.status
 
     def place(self):
@@ -141,6 +140,7 @@ class Gripper:
         self.holding_object = ""
         self.status = False
         self.update_gripper_info(False)
+        print("Released Object")
         return self.status
 
     def callback(self, msg):
