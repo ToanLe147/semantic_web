@@ -2,3 +2,11 @@
 Developing a semantic knowledge base for robotics manipulation
 
 add arm_controller_ur5.yaml in simulation/ur5_description to package universal_robot/ur_gazebo/controller
+
+# Dependencies
+pip install Flask-SocketIO
+pip install python-pcl
+pip install Flask
+pip install roslibpy
+
+# Add ur package / gazebo
