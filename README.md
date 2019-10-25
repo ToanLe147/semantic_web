@@ -8,5 +8,5 @@ pip install Flask-SocketIO
 pip install python-pcl
 pip install Flask
 pip install roslibpy
-
-# Add ur package / gazebo
+pip install --user pyassimp==3.3
+Add ur package / gazebo
