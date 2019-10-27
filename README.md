@@ -16,14 +16,3 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
 ## How to use
 
 ## Current Status
-pip install Flask-SocketIO
-
-pip install python-pcl
-
-pip install Flask
-
-pip install roslibpy
-
-pip install --user pyassimp==3.3
-
-Add ur package / gazebo
