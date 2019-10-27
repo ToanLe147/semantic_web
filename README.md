@@ -1,4 +1,4 @@
-HSV detection with UR5 arm (Gazebo environment and Flask User Int)
+HSV detection with UR5 arm (Gazebo environment and Flask User Interface)
 ==================================================================
 This project is developed using ontology as a knowledge base 
 
