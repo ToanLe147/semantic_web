@@ -3,6 +3,8 @@ HSV detection with UR5 arm (Gazebo environment and Flask User Interface)
 This project is developed using ontology as a knowledge base 
 
 ## Video
+<p align="center">
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=J7AZaEtInVc" target="_blank"><img src="http://img.youtube.com/vi/J7AZaEtInVc/0.jpg" alt="Simulation Result" width="450" height="315" border="0" /></a>
 
 ## Requirements
 * ROS Kinetc (Gazebo included) - Also testing with ROS Melodic and it runs well
