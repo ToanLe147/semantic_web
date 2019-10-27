@@ -1,9 +1,19 @@
-# semantic_web
-Developing a semantic knowledge base for robotics manipulation
+HSV detection with UR5 arm (Gazebo environment and Flask webapp UI)
+==================================================================
+This project is developed using ontology as a knowledge base 
 
-add arm_controller_ur5.yaml in simulation/ur5_description to package universal_robot/ur_gazebo/controller
+## Video
 
-# Dependencies
+## Requirements
+* ROS Kinetc (Gazebo included) - Also testing with ROS Melodic and it runs well
+* Apache Jena Fuseki - a SPARQL server
+* Flask
+* ROS - Flask communication
+## Installation
+
+## How to use
+
+## Current Status
 pip install Flask-SocketIO
 
 pip install python-pcl
