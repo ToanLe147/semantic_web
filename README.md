@@ -12,24 +12,24 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
 * [Flask](https://pypi.org/project/Flask/)
 * [ROS - Flask communication](http://wiki.ros.org/rosbridge_suite)
 ## Installation
-Clone this repository and [Gazebo Link Attacher](https://github.com/pal-robotics/gazebo_ros_link_attacher). The attacher is needed for psuedo vacuum gripper.
+* Clone this repository and [Gazebo Link Attacher](https://github.com/pal-robotics/gazebo_ros_link_attacher). The attacher is needed for psuedo vacuum gripper.
 ```terminal
-cd {your catkin workspace}/src
+cd catkin_ws/src
 git clone https://github.com/pal-robotics/gazebo_ros_link_attacher
 git clone https://github.com/ToanLe147/semantic_web
 cd ..
 catkin_make
 ```
-Add Kinect model in Gazebo folder.
+* Add Kinect model in Gazebo folder.
 ```terminal
 cd ~/.gazebo
 [ -d "./models" ] && echo "OK" || echo "Not OK"
 ```
-If the result is **"OK"** then
+** If the result is **"OK"** then
 ```terminal
 cp -r ~/catkin_ws/src/semantic_web/simulation/kinect_ros ./models/kinect_ros
 ```
-If the result is **"Not OK"** then
+** If the result is **"Not OK"** then
 
 ```terminal
 mkdir ./models
