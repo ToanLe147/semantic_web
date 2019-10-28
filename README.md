@@ -12,7 +12,13 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
 * Flask
 * ROS - Flask communication
 ## Installation
-
+```
+cd {your catkin workspace}/src
+git clone https://github.com/pal-robotics/gazebo_ros_link_attacher
+git clone https://github.com/ToanLe147/semantic_web
+cd ..
+catkin_make
+```
 ## How to use
 
 ## Current Status
