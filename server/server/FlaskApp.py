@@ -2,7 +2,9 @@
 # ######### Edit modpath to get correct directory
 from flask import Flask, render_template
 import sys
-modpath = '/home/nico/catkin_ws/src/semantic_web/src'
+import rospkg
+rospack = rospkg.RosPack()
+modpath = rospack.get_path('semantic_web') + '/src'
 sys.path.insert(0, modpath)
 from flask_socketio import SocketIO
 from uploader import Ontology

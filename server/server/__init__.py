@@ -1,4 +1,6 @@
 import sys
+import rospkg
 
-modpath = '/home/nico/catkin_ws/src/semantic_web/src'
+rospack = rospkg.RosPack()
+modpath = rospack.get_path('semantic_web') + '/src'
 sys.path.insert(0, modpath)

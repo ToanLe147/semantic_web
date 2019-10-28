@@ -1,6 +1,10 @@
 #!/usr/bin/python
 import sys
-sys.path.insert(0, "/home/nico/catkin_ws/src/semantic_web/server/server")
+import rospkg
+
+rospack = rospkg.RosPack()
+modpath = rospack.get_path('semantic_web') + '/src'
+sys.path.insert(0, modpath)
 sys.path.insert(1, "/home/nico/.local/lib/python2.7/site-packages")
 sys.path.insert(2, "/home/nico/.local/lib/python2.7/site-packages")
 # print (sys.path)
