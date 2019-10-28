@@ -25,12 +25,11 @@ catkin_make
 cd ~/.gazebo
 [ -d "./models" ] && echo "OK" || echo "Not OK"
 ```
-** If the result is **"OK"** then
+..* If the result is **"OK"** then
 ```terminal
 cp -r ~/catkin_ws/src/semantic_web/simulation/kinect_ros ./models/kinect_ros
 ```
-** If the result is **"Not OK"** then
-
+..* If the result is **"Not OK"** then
 ```terminal
 mkdir ./models
 cp -r ~/catkin_ws/src/semantic_web/simulation/kinect_ros ./models/kinect_ros
