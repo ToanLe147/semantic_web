@@ -35,5 +35,26 @@ catkin_make
     cp -r ~/catkin_ws/src/semantic_web/simulation/kinect_ros ./models/kinect_ros
     ```
 ## How to use
-
+* Open first terminal tab to run ontology server
+```terminal
+cd {your apache-jena-fuseki folder}
+./fuseki-server
+```
+* Open second terminal tab to run Gazebo environemnt.
+```terminal
+roslaunch semantic_web experiment.launch
+```
+  * If you want to run rviz with the Gazebo then run this command line instead
+    ```terminal
+    roslaunch semantic_web experiment.launch rviz:=true
+    ```
+* Open third terminal tab to run the UI server and other ROS nodes to control the Gazebo experiment
+```terminal
+roslaunch semantic_web server.launch
+```
 ## Current Status
+* This repository was tested in ROS Kinetic (Ubuntu 16.04) and partially in ROS Melodic (Ubuntu 18.04). It's running well in Kinetic and the Gazebo experiment also works in ROS Melodic (I haven't test the UI server in Melodic yet).
+* If you have warning with [**pyassimp**](https://pypi.org/project/pyassimp/) when running in ROS Kinetic then fix it by installing **pyassimp** version 3.3
+```terminal
+pip install --user pyassimp==3.3
+```
