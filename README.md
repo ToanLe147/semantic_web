@@ -13,13 +13,13 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
   * [ROS - Flask communication](http://wiki.ros.org/rosbridge_suite)
 ## Installation
 * Clone this repository and [Gazebo Link Attacher](https://github.com/pal-robotics/gazebo_ros_link_attacher). The attacher is needed for psuedo vacuum gripper.
-```terminal
-cd catkin_ws/src
-git clone https://github.com/pal-robotics/gazebo_ros_link_attacher
-git clone https://github.com/ToanLe147/semantic_web
-cd ..
-catkin_make
-```
+  ```terminal
+  cd catkin_ws/src
+  git clone https://github.com/pal-robotics/gazebo_ros_link_attacher
+  git clone https://github.com/ToanLe147/semantic_web
+  cd ..
+  catkin_make
+  ```
 * Add Kinect model in Gazebo folder.
   ```terminal
   cd ~/.gazebo
@@ -36,25 +36,27 @@ catkin_make
     ```
 ## How to use
 * Open first terminal tab to run ontology server
-```terminal
-cd {your apache-jena-fuseki folder}
-./fuseki-server
-```
+  ```terminal
+  cd {your apache-jena-fuseki folder}
+  ./fuseki-server
+  ```
+In web browser, go to **localhost:3030** to access Apache Fuseki server. Create a dataset name "Brainstorm" and copy [initial_ontology.txt](https://github.com/ToanLe147/semantic_web/blob/master/knowledge_base/initial_ontology.txt) to the default graph.
 * Open second terminal tab to run Gazebo environemnt.
-```terminal
-roslaunch semantic_web experiment.launch
-```
+  ```terminal
+  roslaunch semantic_web experiment.launch
+  ```
   * If you want to run rviz with the Gazebo then run this command line instead
     ```terminal
     roslaunch semantic_web experiment.launch rviz:=true
     ```
 * Open third terminal tab to run the UI server and other ROS nodes to control the Gazebo experiment
-```terminal
-roslaunch semantic_web server.launch
-```
+  ```terminal
+  roslaunch semantic_web server.launch
+  ```
+In web browser, go to **localhost:5000** to access the web User Interface. If you want to run the UI in phone or other computer, go to [FlaskApp.py](https://github.com/ToanLe147/semantic_web/blob/master/server/server/FlaskApp.py) in *semantic_web/server/server* to change the host IP (last line) to your server computer IP.
 ## Current Status
 * This repository was tested in ROS Kinetic (Ubuntu 16.04) and partially in ROS Melodic (Ubuntu 18.04). It's running well in Kinetic and the Gazebo experiment also works in ROS Melodic (I haven't test the UI server in Melodic yet).
-* If you have warning with [**pyassimp**](https://pypi.org/project/pyassimp/) when running in ROS Kinetic then fix it by installing **pyassimp** version 3.3
-```terminal
-pip install --user pyassimp==3.3
-```
+* If you have warning with [pyassimp](https://pypi.org/project/pyassimp/) when running in ROS Kinetic then fix it by installing **pyassimp** version 3.3
+  ```terminal
+  pip install --user pyassimp==3.3
+  ```
