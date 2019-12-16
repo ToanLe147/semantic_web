@@ -23,11 +23,11 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0672045 -0.0672045</point>
-            <point>0.0672045 -0.0672045</point>
-            <point>-0.0672045 -0.0672045</point>
-            <point>-0.0672045 0.0672045</point>
-            <point>0.0672045 0.0672045</point>
+            <point>0.03360225 -0.03360225</point>
+	    <point>0.03360225 -0.03360225</point>
+	    <point>-0.03360225 -0.03360225</point>
+	    <point>-0.03360225 0.03360225</point>
+	    <point>0.03360225 0.03360225</point>
           </polyline>
         </geometry>
         <material>
@@ -52,13 +52,13 @@
         <max_contacts>10</max_contacts>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
-          <polyline>
+          <polyline>            
             <height>0.01</height>
-            <point>0.0672045 -0.0672045</point>
-            <point>0.0672045 -0.0672045</point>
-            <point>-0.0672045 -0.0672045</point>
-            <point>-0.0672045 0.0672045</point>
-            <point>0.0672045 0.0672045</point>
+            <point>0.03360225 -0.03360225</point>
+	    <point>0.03360225 -0.03360225</point>
+	    <point>-0.03360225 -0.03360225</point>
+	    <point>-0.03360225 0.03360225</point>
+	    <point>0.03360225 0.03360225</point>          
           </polyline>
         </geometry>
         <surface>

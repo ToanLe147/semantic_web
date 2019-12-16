@@ -23,12 +23,12 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
+            <point>0.03234475 0.021630625</point>
+	    <point>0.03299275 -0.02041625</point>
+	    <point>-0.0073881 -0.03401675</point>
+	    <point>-0.03299275 -0.0003752575</point>
+	    <point>-0.0084364 0.03401675</point>
+	    <point>0.03234475 0.021630625</point>
           </polyline>
         </geometry>
         <material>
@@ -50,15 +50,15 @@
       </visual>
       <visual name='ModelPreview::link::visual'>
         <pose frame=''>0 0 0 0 -0 0</pose>
-        <geometry>
+	<geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
+            <point>0.03234475 0.021630625</point>
+	    <point>0.03299275 -0.02041625</point>
+	    <point>-0.0073881 -0.03401675</point>
+	    <point>-0.03299275 -0.0003752575</point>
+	    <point>-0.0084364 0.03401675</point>
+	    <point>0.03234475 0.021630625</point>
           </polyline>
         </geometry>
         <material>
@@ -85,12 +85,12 @@
         <geometry>
           <polyline>
             <height>0.01</height>
-            <point>0.0646895 0.04326125</point>
-            <point>0.0659855 -0.0408325</point>
-            <point>-0.0147762 -0.0680335</point>
-            <point>-0.0659855 -0.000750515</point>
-            <point>-0.0168728 0.0680335</point>
-            <point>0.0646895 0.04326125</point>
+            <point>0.03234475 0.021630625</point>
+	    <point>0.03299275 -0.02041625</point>
+	    <point>-0.0073881 -0.03401675</point>
+	    <point>-0.03299275 -0.0003752575</point>
+	    <point>-0.0084364 0.03401675</point>
+	    <point>0.03234475 0.021630625</point>
           </polyline>
         </geometry>
         <surface>

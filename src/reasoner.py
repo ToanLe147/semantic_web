@@ -60,6 +60,7 @@ class Reasoner:
 
         # Temporary data
         self.task = OrderedDict()
+        self.gazebo_object_names = []
         if KnowledgeBase.get_property("Kinect", "Data") != "":
             initial_gazebo_names = eval(KnowledgeBase.get_property("Kinect",
                                                                    "Data"))

@@ -174,8 +174,17 @@
     $("img#picking_frame").on("click", function(event) {
         let x = event.pageX - this.offsetLeft;
         let y = event.pageY - this.offsetTop;
-        alert("X Coordinate: " + x + " Y Coordinate: " + y);
+        socket.emit('user_guilding', {
+            x: event.pageX - this.offsetLeft,
+            y: event.pageY - this.offsetTop
+        })
+        // alert("X Coordinate: " + x + " Y Coordinate: " + y);
     });
+
+    // Click on INSTRUCTION image Response
+    socket.on('user_guilding_response', function(msg){
+        document.getElementById("observe_trigger_status").innerHTML = msg
+    })
 
   </script>
 {% endblock %}

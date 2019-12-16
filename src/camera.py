@@ -70,7 +70,7 @@ class Camera:
             approx = cv2.approxPolyDP(i, 0.03 * cv2.arcLength(i, True), True)
             # print(len(approx))
             # print("===")
-            if area > 400:
+            if area > 200:
                 cv2.drawContours(self.img, [approx], 0, (0, 0, 0), 2)
                 if len(approx) == 3:
                     value = self.update_detected_shape(approx, 3)

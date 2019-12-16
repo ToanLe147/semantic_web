@@ -122,6 +122,17 @@ def perform_task(msg):
     print("perform pressed")
 
 
+@socketio.on('user_guilding')
+def user_guilding(msg):
+    x = msg['x']
+    y = msg['y']
+    res = "No results"
+    if 75 < x < 565 and 120 < y < 325:
+        res = "x: {0}, y:{1}".format(x, y)
+    socketio.emit('user_guilding_response', res, callback="Message Received")
+
+
 if __name__ == '__main__':
     # socketio.run(app, host="192.168.100.16")
+    # socketio.run(app, host="192.168.1.6")  # homeVN
     socketio.run(app, host="localhost")
