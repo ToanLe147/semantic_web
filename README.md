@@ -11,6 +11,7 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
   * [Apache Jena Fuseki - a SPARQL server](https://jena.apache.org/download/#apache-jena-fuseki)
   * [Flask](https://pypi.org/project/Flask/)
   * [ROS - Flask communication](http://wiki.ros.org/rosbridge_suite)
+  * [MoveIt](https://moveit.ros.org/install/)
 ## Installation
 * Clone this repository and [Gazebo Link Attacher](https://github.com/pal-robotics/gazebo_ros_link_attacher). The attacher is needed for psuedo vacuum gripper.
   ```terminal
