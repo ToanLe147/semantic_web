@@ -4,7 +4,7 @@ This repository presents a simple semantic pick and place task of UR5 in ROS-Gaz
 
 ## Video
 <p align="center">
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=VpH7y9el_gs" target="_blank"><img src="http://img.youtube.com/vi/VpH7y9el_gs/0.jpg" alt="Simulation Result" width="450" height="315" border="0" /></a>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=DAtxlk-D80w" target="_blank"><img src="http://img.youtube.com/vi/DAtxlk-D80w/0.jpg" alt="Simulation Result" width="450" height="315" border="0" /></a>
 
 ## Requirements
   * [ROS Kinetc (Gazebo included) - Also testing with ROS Melodic and it runs well](http://wiki.ros.org/ROS/Installation)
